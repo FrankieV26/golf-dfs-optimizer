@@ -208,27 +208,41 @@ export function applyCourseFit(
 }
 
 /**
- * Generate mock SG data for golfers (when real data isn't available).
- * Uses fppg as a rough proxy -- higher fppg = likely better SG.
- * In production, this would be replaced with real Data Golf API data.
+ * Populate SG data from Data Golf enrichment when available,
+ * falling back to FPPG-based estimates for unmatched players.
  */
-export function generateMockSG(golfers: Golfer[]): GolferWithCourseFit[] {
+export function populateSG(golfers: Golfer[]): GolferWithCourseFit[] {
   const maxFppg = Math.max(...golfers.map((g) => g.fppg), 1);
 
   return golfers.map((g) => {
-    // Normalize fppg to a 0-1 scale, then add some variance
+    // Use real Data Golf SG data if available
+    if (g.dg && (g.dg.sgTotal !== 0 || g.dg.sgApp !== 0)) {
+      const sg: StrokesGained = {
+        offTheTee: g.dg.sgOtt,
+        approach: g.dg.sgApp,
+        aroundTheGreen: g.dg.sgArg,
+        putting: g.dg.sgPutt,
+        teeToGreen: g.dg.sgOtt + g.dg.sgApp + g.dg.sgArg,
+      };
+      return { ...g, sg };
+    }
+
+    // Fallback: estimate from FPPG for players without DG data
     const base = g.fppg / maxFppg;
     const noise = () => (Math.random() - 0.5) * 0.4;
-
     const sg: StrokesGained = {
       offTheTee: base * 1.5 + noise(),
       approach: base * 2.0 + noise(),
       aroundTheGreen: base * 1.0 + noise(),
       putting: base * 1.0 + noise(),
-      teeToGreen: 0, // computed below
+      teeToGreen: 0,
     };
     sg.teeToGreen = sg.offTheTee + sg.approach + sg.aroundTheGreen;
-
     return { ...g, sg };
   });
 }
+
+/**
+ * @deprecated Use populateSG() instead — kept for backward compat
+ */
+export const generateMockSG = populateSG;

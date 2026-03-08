@@ -46,17 +46,22 @@ function normalRandom(rng: () => number, mean: number, stddev: number): number {
 }
 
 /**
- * Estimate a golfer's per-round scoring parameters from their FPPG.
+ * Estimate a golfer's per-round scoring parameters.
  *
- * Higher FPPG -> more birdies, fewer bogeys -> better mean round score.
- * We model each round's fantasy points as normally distributed.
+ * When Data Golf data is available, uses their projected points and std_dev
+ * (much more accurate). Falls back to FPPG-based estimates otherwise.
  */
-function estimateRoundParams(fppg: number): { roundMean: number; roundStd: number } {
-  // FPPG on DK is typically per-round-equivalent (4 rounds of a tournament)
-  // Top golfers: ~18-22 FPPG, mid-tier: ~10-15, low-tier: ~5-8
-  // We model a single round's fantasy point output
-  const roundMean = fppg / 4; // rough per-round estimate
-  // Higher projected players tend to have higher variance (more birdies but also more risk)
+function estimateRoundParams(golfer: Golfer): { roundMean: number; roundStd: number } {
+  if (golfer.dg && golfer.dg.projPoints > 0) {
+    // DG proj_points is the total tournament projection (4 rounds).
+    // DG std_dev is also for the full tournament.
+    const roundMean = golfer.dg.projPoints / 4;
+    const roundStd = golfer.dg.projStdDev / 4;
+    return { roundMean, roundStd };
+  }
+
+  // Fallback: estimate from FPPG
+  const roundMean = golfer.fppg / 4;
   const roundStd = 3 + roundMean * 0.3;
   return { roundMean, roundStd };
 }
@@ -117,7 +122,7 @@ export function runSimulation(
   const rng = createRng(seed);
 
   // Pre-compute per-golfer round parameters
-  const params = golfers.map((g) => estimateRoundParams(g.fppg));
+  const params = golfers.map((g) => estimateRoundParams(g));
 
   // Accumulators
   const madeCut = new Float64Array(n);

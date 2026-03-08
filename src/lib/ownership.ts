@@ -20,24 +20,36 @@ export interface OwnershipAdjustedGolfer extends Golfer {
 /**
  * Estimate projected ownership for each golfer.
  *
- * In production this would come from consensus projections,
- * but we can model it from salary and FPPG -- the most popular
- * players tend to be high salary + high FPPG.
- *
- * Ownership roughly follows: ownership ∝ (fppg / salary * 1000) * fppg
+ * Uses real Data Golf projected ownership when available (much more accurate).
+ * Falls back to salary/FPPG-based estimates for players without DG data.
  */
 export function estimateOwnership(golfers: Golfer[]): OwnershipAdjustedGolfer[] {
   if (golfers.length === 0) return [];
 
-  // Compute raw "popularity" score
-  const raw = golfers.map((g) => {
-    // Combine value and raw points -- expensive high-scoring players
-    // tend to be the most popular
-    return g.fppg * g.value;
-  });
+  // Check if any golfers have real DG ownership data
+  const hasDGOwnership = golfers.some(g => g.dg?.projOwnership != null && g.dg.projOwnership > 0);
 
-  // Normalize to sum to ~600% total ownership (6 golfers per lineup,
-  // so if everyone picked optimally, total ownership across all golfers ≈ 600%)
+  if (hasDGOwnership) {
+    // Use real DG ownership, with fallback estimation for unmatched players
+    const raw = golfers.map((g) => g.fppg * g.value);
+    const totalRaw = raw.reduce((s, r) => s + r, 0) || 1;
+    const scale = 600 / totalRaw;
+
+    return golfers.map((g, i) => {
+      const projOwnership = (g.dg?.projOwnership != null && g.dg.projOwnership > 0)
+        ? g.dg.projOwnership
+        : Math.max(0.5, Math.min(50, raw[i] * scale));
+      return {
+        ...g,
+        projOwnership,
+        leverage: 0,
+        gppScore: 0,
+      };
+    });
+  }
+
+  // Fallback: estimate from salary + FPPG
+  const raw = golfers.map((g) => g.fppg * g.value);
   const totalRaw = raw.reduce((s, r) => s + r, 0) || 1;
   const targetTotal = 600;
   const scale = targetTotal / totalRaw;
@@ -47,8 +59,8 @@ export function estimateOwnership(golfers: Golfer[]): OwnershipAdjustedGolfer[] 
     return {
       ...g,
       projOwnership,
-      leverage: 0,  // set below
-      gppScore: 0,  // set below
+      leverage: 0,
+      gppScore: 0,
     };
   });
 }

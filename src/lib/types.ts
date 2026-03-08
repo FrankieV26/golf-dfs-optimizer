@@ -14,6 +14,29 @@ export interface Golfer {
   ownership?: number;  // projected ownership %
   // Derived
   value: number;       // fppg / salary * 1000
+  // Data Golf enrichment (optional — populated when DG API is available)
+  dg?: {
+    projPoints: number;       // DG projected fantasy points
+    projOwnership: number | null;
+    projStdDev: number;       // standard deviation of projection
+    // True talent strokes gained
+    sgOtt: number;
+    sgApp: number;
+    sgArg: number;
+    sgPutt: number;
+    sgTotal: number;
+    // Course fit for current event
+    courseFitAdj: number;     // SG adjustment for course fit
+    courseHistoryAdj: number;  // SG adjustment for course history
+    baselinePred: number;     // pure skill prediction (SG vs field/round)
+    finalPred: number;        // skill + course fit + history
+    // Tournament probabilities
+    winProb: number;
+    top5Prob: number;
+    top10Prob: number;
+    top20Prob: number;
+    makeCutProb: number;
+  };
 }
 
 export interface Lineup {
