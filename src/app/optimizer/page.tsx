@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import {
   Golfer,
   Lineup,
@@ -65,6 +65,14 @@ export default function OptimizerPage() {
       setLoadingPlayers(false);
     }
   }, [platform]);
+
+  // Auto-fetch DK slate on page load
+  useEffect(() => {
+    if (platform === 'draftkings') {
+      fetchPlayers();
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleCSVUpload = useCallback(
     async (e: React.ChangeEvent<HTMLInputElement>) => {
