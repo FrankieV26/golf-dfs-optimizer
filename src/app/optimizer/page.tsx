@@ -259,7 +259,15 @@ export default function OptimizerPage() {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Max Exposure %</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Max Exposure %
+                <span className="relative group inline-block ml-1">
+                  <span className="inline-flex items-center justify-center w-4 h-4 rounded-full bg-gray-200 text-gray-500 text-xs cursor-help">?</span>
+                  <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-56 px-3 py-2 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-10">
+                    Maximum % of lineups any single golfer can appear in. Lower = more diverse lineups. 100% = no limit.
+                  </span>
+                </span>
+              </label>
               <input
                 type="number" min={10} max={100} value={maxExposure}
                 onChange={(e) => setMaxExposure(Number(e.target.value))}
@@ -274,6 +282,12 @@ export default function OptimizerPage() {
                   className="rounded border-gray-300 text-green-600"
                 />
                 <span className="text-sm font-medium text-gray-700">GPP Mode</span>
+                <span className="relative group">
+                  <span className="inline-flex items-center justify-center w-4 h-4 rounded-full bg-gray-200 text-gray-500 text-xs cursor-help">?</span>
+                  <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-56 px-3 py-2 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-10">
+                    Guaranteed Prize Pool mode. Builds ownership-leveraged lineups optimized for large tournaments where differentiation wins.
+                  </span>
+                </span>
               </label>
             </div>
             <div className="flex flex-col justify-end">
