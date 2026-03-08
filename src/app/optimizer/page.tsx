@@ -10,7 +10,7 @@ import {
   PLATFORM_CONFIGS,
 } from '@/lib/types';
 import { SimulationResult } from '@/lib/simulation';
-import GolferTable from '@/components/GolferTable';
+import GolferTable, { GolferSortField } from '@/components/GolferTable';
 import LineupResults from '@/components/LineupResults';
 import SimulationTable from '@/components/SimulationTable';
 
@@ -40,7 +40,7 @@ export default function OptimizerPage() {
   const [excludedIds, setExcludedIds] = useState<Set<number>>(new Set());
 
   // Sorting
-  const [sortField, setSortField] = useState<keyof Golfer>('fppg');
+  const [sortField, setSortField] = useState<GolferSortField>('fppg');
   const [sortDir, setSortDir] = useState<'asc' | 'desc'>('desc');
 
   const config = PLATFORM_CONFIGS[platform];
@@ -196,7 +196,7 @@ export default function OptimizerPage() {
     });
   };
 
-  const handleSort = (field: keyof Golfer) => {
+  const handleSort = (field: GolferSortField) => {
     if (field === sortField) {
       setSortDir((d) => (d === 'asc' ? 'desc' : 'asc'));
     } else {
@@ -233,7 +233,7 @@ export default function OptimizerPage() {
 
         {/* Controls */}
         <div className="bg-white rounded-xl border border-gray-200 p-6 mb-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Platform</label>
               <select
@@ -294,8 +294,9 @@ export default function OptimizerPage() {
               {platform === 'draftkings' ? (
                 <button
                   onClick={fetchPlayers} disabled={loadingPlayers}
-                  className="w-full px-4 py-2 bg-green-600 text-white rounded-lg text-sm font-medium hover:bg-green-700 disabled:opacity-50"
+                  className="w-full px-4 py-2 bg-green-600 text-white rounded-lg text-sm font-medium hover:bg-green-700 disabled:opacity-50 flex items-center justify-center gap-2"
                 >
+                  {loadingPlayers && <span className="inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />}
                   {loadingPlayers ? 'Loading...' : 'Load DK Slate'}
                 </button>
               ) : (
@@ -330,17 +331,19 @@ export default function OptimizerPage() {
 
           {/* Action buttons */}
           {golfers.length > 0 && (
-            <div className="mt-4 flex gap-3">
+            <div className="mt-4 flex flex-col sm:flex-row gap-3">
               <button
                 onClick={runSimulation} disabled={simulating}
-                className="px-5 py-2.5 bg-purple-600 text-white rounded-lg text-sm font-medium hover:bg-purple-700 disabled:opacity-50"
+                className="px-5 py-2.5 bg-purple-600 text-white rounded-lg text-sm font-medium hover:bg-purple-700 disabled:opacity-50 flex items-center justify-center gap-2"
               >
+                {simulating && <span className="inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />}
                 {simulating ? 'Simulating...' : 'Run Simulation (10K)'}
               </button>
               <button
                 onClick={runOptimizer} disabled={loading}
-                className="px-5 py-2.5 bg-green-700 text-white rounded-lg text-sm font-medium hover:bg-green-800 disabled:opacity-50"
+                className="px-5 py-2.5 bg-green-700 text-white rounded-lg text-sm font-medium hover:bg-green-800 disabled:opacity-50 flex items-center justify-center gap-2"
               >
+                {loading && <span className="inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />}
                 {loading ? 'Optimizing...' : 'Generate Lineups'}
               </button>
             </div>
@@ -354,7 +357,7 @@ export default function OptimizerPage() {
         )}
 
         {/* Tabs */}
-        {golfers.length > 0 && (
+        {!loadingPlayers && golfers.length > 0 && (
           <div className="flex gap-1 mb-4 border-b border-gray-200">
             <button className={tabClass('players')} onClick={() => setActiveTab('players')}>
               Player Pool ({golfers.length})
@@ -368,8 +371,38 @@ export default function OptimizerPage() {
           </div>
         )}
 
+        {/* Loading skeleton */}
+        {loadingPlayers && (
+          <div className="overflow-x-auto rounded-lg border border-gray-200 bg-white">
+            <table className="min-w-[700px] w-full divide-y divide-gray-200 text-sm">
+              <thead className="bg-gray-50">
+                <tr>
+                  {['Lock', 'Excl', 'Name', 'Salary', 'FPPG', 'Value', 'Own%'].map((h) => (
+                    <th key={h} className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">
+                      {h}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-100">
+                {Array.from({ length: 10 }).map((_, i) => (
+                  <tr key={i}>
+                    <td className="px-3 py-2.5"><div className="w-6 h-6 rounded bg-gray-200 animate-pulse" /></td>
+                    <td className="px-3 py-2.5"><div className="w-6 h-6 rounded bg-gray-200 animate-pulse" /></td>
+                    <td className="px-3 py-2.5"><div className="h-4 w-32 rounded bg-gray-200 animate-pulse" /></td>
+                    <td className="px-3 py-2.5"><div className="h-4 w-16 rounded bg-gray-200 animate-pulse" /></td>
+                    <td className="px-3 py-2.5"><div className="h-4 w-12 rounded bg-gray-200 animate-pulse" /></td>
+                    <td className="px-3 py-2.5"><div className="h-4 w-14 rounded bg-gray-200 animate-pulse" /></td>
+                    <td className="px-3 py-2.5"><div className="h-4 w-12 rounded bg-gray-200 animate-pulse" /></td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+
         {/* Tab content */}
-        {activeTab === 'players' && golfers.length > 0 && (
+        {!loadingPlayers && activeTab === 'players' && golfers.length > 0 && (
           <GolferTable
             golfers={golfers}
             lockedIds={lockedIds}
@@ -382,7 +415,7 @@ export default function OptimizerPage() {
           />
         )}
 
-        {activeTab === 'simulation' && (
+        {!loadingPlayers && activeTab === 'simulation' && (
           simResults.length > 0 ? (
             <SimulationTable results={simResults} elapsed_ms={simElapsed} />
           ) : (
@@ -392,7 +425,7 @@ export default function OptimizerPage() {
           )
         )}
 
-        {activeTab === 'lineups' && (
+        {!loadingPlayers && activeTab === 'lineups' && (
           lineups.length > 0 ? (
             <LineupResults lineups={lineups} elapsed_ms={elapsed} />
           ) : (
@@ -402,7 +435,7 @@ export default function OptimizerPage() {
           )
         )}
 
-        {golfers.length === 0 && (
+        {!loadingPlayers && golfers.length === 0 && (
           <div className="bg-white rounded-lg border border-gray-200 p-12 text-center text-gray-500">
             <p className="text-lg mb-2">
               {platform === 'draftkings'

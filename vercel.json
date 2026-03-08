@@ -5,7 +5,7 @@
       "schedule": "0 18 * * 3"
     },
     {
-      "path": "/api/cron/snapshot",
+      "path": "/api/cron/snapshot?mode=results",
       "schedule": "0 23 * * 0"
     }
   ]

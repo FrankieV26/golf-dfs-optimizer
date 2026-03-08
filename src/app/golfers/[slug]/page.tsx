@@ -41,8 +41,23 @@ export default async function GolferProfilePage({ params }: PageProps) {
     .map((s) => ({ slug: s, profile: COURSE_PROFILES[s], data: COURSE_DATA[s] }))
     .filter((c) => c.profile && c.data);
 
+  const personJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Person',
+    name: golfer.name,
+    url: `https://golf-dfs-optimizer.vercel.app/golfers/${slug}`,
+    nationality: golfer.country,
+    jobTitle: 'Professional Golfer',
+    description: `${golfer.name} — World #${golfer.worldRanking} professional golfer from ${golfer.country}. Strokes Gained Total: ${golfer.strokesGained.total >= 0 ? '+' : ''}${golfer.strokesGained.total.toFixed(2)}.`,
+    sameAs: [],
+  };
+
   return (
     <div className="min-h-screen bg-white">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
+      />
       <Header currentSlug={slug} />
 
       <main className="max-w-4xl mx-auto px-4 py-12">

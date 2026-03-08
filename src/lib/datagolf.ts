@@ -195,6 +195,79 @@ export async function fetchField(tour = 'pga'): Promise<DGFieldResponse> {
   return res.json();
 }
 
+// ── Live Results (post-tournament) ───────────
+
+export interface DGLiveStatsPlayer {
+  dg_id: number;
+  player_name: string;
+  sg_total: number;
+  [key: string]: unknown;
+}
+
+export interface DGLiveStatsResponse {
+  event_name: string;
+  last_updated: string;
+  live_stats: DGLiveStatsPlayer[];
+}
+
+export interface DGInPlayPlayer {
+  dg_id: number;
+  player_name: string;
+  current_pos: string;       // e.g. "1", "T5", "MC"
+  current_round: number;
+  thru: number | string;
+  today: number;
+  total: number;
+  r1: number | null;
+  r2: number | null;
+  r3: number | null;
+  r4: number | null;
+  [key: string]: unknown;
+}
+
+export interface DGInPlayResponse {
+  event_name: string;
+  last_updated: string;
+  data: DGInPlayPlayer[];
+}
+
+/**
+ * Fetch live tournament stats (SG: Total for the event)
+ * and in-play positions (finish position, round scores).
+ * Used by the Sunday results cron to backfill actual results.
+ */
+export async function fetchLiveResults(tour = 'pga'): Promise<{
+  event_name: string;
+  stats: DGLiveStatsPlayer[];
+  positions: DGInPlayPlayer[];
+}> {
+  const [statsRes, inPlayRes] = await Promise.all([
+    fetch(url('/preds/live-tournament-stats', {
+      stats: 'sg_total',
+      round: 'event_avg',
+      display: 'value',
+      file_format: 'json',
+    })),
+    fetch(url('/preds/in-play', {
+      tour,
+      odds_format: 'percent',
+      file_format: 'json',
+    })),
+  ]);
+
+  if (!statsRes.ok) throw new Error(`DG live stats: ${statsRes.status} ${statsRes.statusText}`);
+  if (!inPlayRes.ok) throw new Error(`DG in-play: ${inPlayRes.status} ${inPlayRes.statusText}`);
+
+  const statsData: DGLiveStatsResponse = await statsRes.json();
+  const inPlayData: DGInPlayResponse = await inPlayRes.json();
+
+  return {
+    event_name: statsData.event_name || inPlayData.event_name,
+    stats: statsData.live_stats ?? [],
+    positions: inPlayData.data ?? [],
+  };
+}
+
 // ── Name Matching ────────────────────────────
 
 /**

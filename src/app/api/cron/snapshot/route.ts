@@ -1,16 +1,20 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { fetchAllDGData } from '@/lib/datagolf';
+import { fetchAllDGData, fetchLiveResults, normalizeName } from '@/lib/datagolf';
 import { getDKGolfers } from '@/lib/draftkings';
-import { normalizeName, DGEnrichedPlayer } from '@/lib/datagolf';
+import type { DGEnrichedPlayer } from '@/lib/datagolf';
 
 /**
- * Weekly snapshot cron — captures the full DK slate + DG projections
- * into Supabase for backtesting.
+ * Weekly snapshot cron — two modes:
  *
- * Runs via Vercel cron every Wednesday at 18:00 UTC (after slates open)
- * and Sunday at 23:00 UTC (to capture final results via DG live stats).
+ * 1. **snapshot** (Wednesday 18:00 UTC):
+ *    Captures the full DK slate + DG projections into Supabase for backtesting.
  *
- * POST /api/cron/snapshot
+ * 2. **results** (Sunday 23:00 UTC):
+ *    Updates existing player snapshots with actual finish positions and made-cut
+ *    data from Data Golf's live-tournament-stats and in-play endpoints.
+ *
+ * POST /api/cron/snapshot            — snapshot mode (default)
+ * POST /api/cron/snapshot?mode=results — results mode
  * Header: Authorization: Bearer <CRON_SECRET>
  */
 
@@ -43,6 +47,17 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
+  const mode = req.nextUrl.searchParams.get('mode') || 'snapshot';
+
+  if (mode === 'results') {
+    return handleResults();
+  }
+  return handleSnapshot();
+}
+
+// ── Snapshot Mode (Wednesday) ────────────────
+
+async function handleSnapshot() {
   try {
     // Fetch DK slate + DG data in parallel
     const [dkData, dgData] = await Promise.all([
@@ -130,6 +145,98 @@ export async function GET(req: NextRequest) {
   } catch (err) {
     const msg = err instanceof Error ? err.message : 'Unknown error';
     console.error('Snapshot cron error:', msg);
+    return NextResponse.json({ error: msg }, { status: 500 });
+  }
+}
+
+// ── Results Mode (Sunday) ────────────────────
+
+async function handleResults() {
+  try {
+    // Fetch live results from Data Golf
+    const liveData = await fetchLiveResults();
+
+    if (!liveData.positions.length) {
+      return NextResponse.json({
+        message: 'No live results available — tournament may not have started',
+        timestamp: new Date().toISOString(),
+      });
+    }
+
+    // Find the most recent tournament in our DB for this event
+    const tournaments = await supabaseQuery(
+      `/dfs_tournaments?event_name=eq.${encodeURIComponent(liveData.event_name)}&order=snapshot_date.desc&limit=1`
+    );
+
+    if (!tournaments.length) {
+      return NextResponse.json({
+        message: `No snapshot found for "${liveData.event_name}" — nothing to update`,
+        timestamp: new Date().toISOString(),
+      });
+    }
+
+    const tournament = tournaments[0];
+
+    // Get all player snapshots for this tournament
+    const snapshots = await supabaseQuery(
+      `/dfs_player_snapshots?tournament_id=eq.${tournament.id}&select=id,player_name`
+    );
+
+    if (!snapshots.length) {
+      return NextResponse.json({
+        message: 'No player snapshots found for this tournament',
+        timestamp: new Date().toISOString(),
+      });
+    }
+
+    // Build lookup maps from live data by normalized name
+    const positionMap = new Map<string, { current_pos: string; r3: number | null; r4: number | null }>();
+    for (const p of liveData.positions) {
+      positionMap.set(normalizeName(p.player_name), {
+        current_pos: p.current_pos,
+        r3: p.r3,
+        r4: p.r4,
+      });
+    }
+
+    const statsMap = new Map<string, number>();
+    for (const p of liveData.stats) {
+      statsMap.set(normalizeName(p.player_name), p.sg_total);
+    }
+
+    // Update each player snapshot with actual results
+    let updated = 0;
+    for (const snap of snapshots) {
+      const norm = normalizeName(snap.player_name);
+      const pos = positionMap.get(norm);
+      if (!pos) continue;
+
+      // A player made the cut if they have R3 or R4 scores
+      const madeCut = pos.r3 !== null || pos.r4 !== null;
+      const actualSgTotal = statsMap.get(norm) ?? null;
+
+      await supabaseQuery(`/dfs_player_snapshots?id=eq.${snap.id}`, {
+        method: 'PATCH',
+        body: JSON.stringify({
+          actual_finish_position: pos.current_pos,
+          made_cut: madeCut,
+          actual_sg_total: actualSgTotal,
+        }),
+      });
+
+      updated++;
+    }
+
+    return NextResponse.json({
+      message: 'Results updated',
+      tournament: liveData.event_name,
+      totalSnapshots: snapshots.length,
+      updated,
+      timestamp: new Date().toISOString(),
+    });
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : 'Unknown error';
+    console.error('Results cron error:', msg);
     return NextResponse.json({ error: msg }, { status: 500 });
   }
 }

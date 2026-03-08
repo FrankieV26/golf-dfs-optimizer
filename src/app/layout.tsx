@@ -6,6 +6,7 @@ const geistSans = Geist({ variable: '--font-geist-sans', subsets: ['latin'] });
 const geistMono = Geist_Mono({ variable: '--font-geist-mono', subsets: ['latin'] });
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://golf-dfs-optimizer.vercel.app'),
   title: {
     default: 'BirdieLine - Free Golf DFS Lineup Optimizer for DraftKings & FanDuel',
     template: '%s | BirdieLine',
@@ -24,6 +25,9 @@ export const metadata: Metadata = {
     'DraftKings PGA lineup',
     'FanDuel PGA lineup',
   ],
+  alternates: {
+    canonical: '/',
+  },
   openGraph: {
     title: 'BirdieLine - Free Golf DFS Lineup Optimizer',
     description:
@@ -31,14 +35,47 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'en_US',
     siteName: 'BirdieLine',
+    url: 'https://golf-dfs-optimizer.vercel.app',
+    images: [
+      {
+        url: '/api/og',
+        width: 1200,
+        height: 630,
+        alt: 'BirdieLine - Free Golf DFS Lineup Optimizer',
+      },
+    ],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'BirdieLine - Free Golf DFS Lineup Optimizer',
     description:
       'Generate optimal DraftKings & FanDuel golf lineups in seconds.',
+    images: ['/api/og'],
   },
   robots: { index: true, follow: true },
+};
+
+const websiteJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: 'BirdieLine',
+  url: 'https://golf-dfs-optimizer.vercel.app',
+  description:
+    'Free golf DFS lineup optimizer for DraftKings and FanDuel. Generate optimal PGA lineups with advanced analytics, ownership projections, and course-fit scoring.',
+  potentialAction: {
+    '@type': 'SearchAction',
+    target: 'https://golf-dfs-optimizer.vercel.app/golfers/{search_term_string}',
+    'query-input': 'required name=search_term_string',
+  },
+};
+
+const organizationJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: 'BirdieLine',
+  url: 'https://golf-dfs-optimizer.vercel.app',
+  description:
+    'Free golf DFS lineup optimizer with course-fit scoring, Monte Carlo simulation, and ownership-aware optimization.',
 };
 
 export default function RootLayout({
@@ -46,6 +83,16 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
+        />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >

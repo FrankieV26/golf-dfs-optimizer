@@ -1,8 +1,36 @@
 import Link from 'next/link';
 
+const softwareAppJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: 'BirdieLine Golf DFS Optimizer',
+  applicationCategory: 'SportsApplication',
+  operatingSystem: 'Web',
+  offers: {
+    '@type': 'Offer',
+    price: '0',
+    priceCurrency: 'USD',
+  },
+  description:
+    'Free golf DFS lineup optimizer for DraftKings and FanDuel. Generate optimal PGA lineups with course-fit scoring, Monte Carlo simulation, and ownership-aware optimization.',
+  url: 'https://golf-dfs-optimizer.vercel.app/optimizer',
+  featureList: [
+    'Course-fit scoring',
+    'Monte Carlo simulation',
+    'Ownership leverage optimization',
+    'DraftKings and FanDuel support',
+    'Multi-lineup generation',
+    'CSV export',
+  ],
+};
+
 export default function HomePage() {
   return (
     <div className="min-h-screen bg-white">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareAppJsonLd) }}
+      />
       {/* Header */}
       <header className="border-b border-gray-100">
         <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">

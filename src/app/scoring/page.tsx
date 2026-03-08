@@ -163,6 +163,40 @@ export default function ScoringPage() {
             Launch Optimizer
           </Link>
         </div>
+
+        <div className="mt-12 pt-8 border-t border-gray-200">
+          <h3 className="text-xl font-bold mb-4">Related Resources</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <Link
+              href="/strategy"
+              className="block rounded-xl border border-gray-200 p-4 hover:border-green-300 transition-colors"
+            >
+              <h4 className="font-bold text-gray-900 mb-1">Golf DFS Strategy Guide</h4>
+              <p className="text-sm text-gray-600">Course fit, ownership leverage, bankroll management, and more.</p>
+            </Link>
+            <Link
+              href="/golfers/scottie-scheffler"
+              className="block rounded-xl border border-gray-200 p-4 hover:border-green-300 transition-colors"
+            >
+              <h4 className="font-bold text-gray-900 mb-1">Scottie Scheffler Profile</h4>
+              <p className="text-sm text-gray-600">World #1 — the prototypical high-ceiling DK play with elite birdie upside.</p>
+            </Link>
+            <Link
+              href="/golfers/collin-morikawa"
+              className="block rounded-xl border border-gray-200 p-4 hover:border-green-300 transition-colors"
+            >
+              <h4 className="font-bold text-gray-900 mb-1">Collin Morikawa Profile</h4>
+              <p className="text-sm text-gray-600">Elite iron player and low-bogey rate — a FanDuel specialist.</p>
+            </Link>
+            <Link
+              href="/courses/augusta-national"
+              className="block rounded-xl border border-gray-200 p-4 hover:border-green-300 transition-colors"
+            >
+              <h4 className="font-bold text-gray-900 mb-1">Augusta National Breakdown</h4>
+              <p className="text-sm text-gray-600">Where eagles and birdie streaks swing DraftKings scoring the most.</p>
+            </Link>
+          </div>
+        </div>
       </main>
 
       <footer className="border-t border-gray-100 py-8 mt-12">

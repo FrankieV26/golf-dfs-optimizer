@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://golf-dfs-optimizer.vercel.app/sitemap.xml

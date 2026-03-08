@@ -32,6 +32,21 @@ export default function LineupResults({ lineups, elapsed_ms }: Props) {
     URL.revokeObjectURL(url);
   };
 
+  const exportDK = () => {
+    const headerRow = 'G,G,G,G,G,G';
+    const rows = lineups.map((l) =>
+      l.golfers.map((g) => `"${g.name}"`).join(',')
+    );
+    const csv = [headerRow, ...rows].join('\n');
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'dk-upload-lineups.csv';
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
   return (
     <div>
       <div className="flex items-center justify-between mb-4">
@@ -43,12 +58,20 @@ export default function LineupResults({ lineups, elapsed_ms }: Props) {
             <p className="text-sm text-gray-500">Generated in {elapsed_ms}ms</p>
           )}
         </div>
-        <button
-          onClick={exportCSV}
-          className="px-4 py-2 bg-gray-800 text-white rounded-lg text-sm hover:bg-gray-700"
-        >
-          Export CSV
-        </button>
+        <div className="flex gap-2">
+          <button
+            onClick={exportCSV}
+            className="px-4 py-2 bg-gray-800 text-white rounded-lg text-sm hover:bg-gray-700"
+          >
+            Export CSV
+          </button>
+          <button
+            onClick={exportDK}
+            className="px-4 py-2 bg-green-700 text-white rounded-lg text-sm hover:bg-green-800"
+          >
+            Export for DK Upload
+          </button>
+        </div>
       </div>
 
       <div className="space-y-2">

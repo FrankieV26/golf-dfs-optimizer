@@ -44,9 +44,9 @@ export default function StrategyPage() {
               <strong>Key strokes-gained categories to evaluate:</strong>
             </p>
             <ul>
-              <li><strong>SG: Off the Tee</strong> — Driving distance and accuracy. Crucial at long, narrow courses like Torrey Pines South.</li>
+              <li><strong>SG: Off the Tee</strong> — Driving distance and accuracy. Crucial at long, narrow courses like <Link href="/courses/torrey-pines-south" className="text-green-700 underline hover:text-green-800">Torrey Pines South</Link>.</li>
               <li><strong>SG: Approach</strong> — Iron play and proximity to the hole. The most consistently predictive stat across all courses.</li>
-              <li><strong>SG: Around the Green</strong> — Short game and chipping. Matters most at courses with difficult greenside areas like Pinehurst No. 2.</li>
+              <li><strong>SG: Around the Green</strong> — Short game and chipping. Matters most at courses with difficult greenside areas like <Link href="/courses/pinehurst-no2" className="text-green-700 underline hover:text-green-800">Pinehurst No. 2</Link>.</li>
               <li><strong>SG: Putting</strong> — Surface-dependent (bentgrass vs bermuda vs poa). Check the grass type before weighting this.</li>
             </ul>
             <p>
@@ -144,6 +144,33 @@ export default function StrategyPage() {
             >
               Launch Optimizer
             </Link>
+          </div>
+
+          <div className="mt-12 pt-8 border-t border-gray-200">
+            <h3 className="text-xl font-bold mb-4">Explore Golfer Profiles</h3>
+            <p className="text-gray-600 mb-4">
+              Study strokes-gained breakdowns and course fits for top PGA Tour players:
+            </p>
+            <div className="flex flex-wrap gap-2">
+              <Link href="/golfers/scottie-scheffler" className="px-3 py-1.5 text-sm rounded-lg border border-gray-200 text-gray-600 hover:border-green-300 hover:text-green-700 transition-colors">Scottie Scheffler</Link>
+              <Link href="/golfers/rory-mcilroy" className="px-3 py-1.5 text-sm rounded-lg border border-gray-200 text-gray-600 hover:border-green-300 hover:text-green-700 transition-colors">Rory McIlroy</Link>
+              <Link href="/golfers/xander-schauffele" className="px-3 py-1.5 text-sm rounded-lg border border-gray-200 text-gray-600 hover:border-green-300 hover:text-green-700 transition-colors">Xander Schauffele</Link>
+              <Link href="/golfers/collin-morikawa" className="px-3 py-1.5 text-sm rounded-lg border border-gray-200 text-gray-600 hover:border-green-300 hover:text-green-700 transition-colors">Collin Morikawa</Link>
+              <Link href="/golfers/jordan-spieth" className="px-3 py-1.5 text-sm rounded-lg border border-gray-200 text-gray-600 hover:border-green-300 hover:text-green-700 transition-colors">Jordan Spieth</Link>
+              <Link href="/golfers/jon-rahm" className="px-3 py-1.5 text-sm rounded-lg border border-gray-200 text-gray-600 hover:border-green-300 hover:text-green-700 transition-colors">Jon Rahm</Link>
+            </div>
+
+            <h3 className="text-xl font-bold mt-8 mb-4">Course Breakdowns</h3>
+            <p className="text-gray-600 mb-4">
+              See course-fit weights and key stats for major PGA Tour venues:
+            </p>
+            <div className="flex flex-wrap gap-2">
+              <Link href="/courses/augusta-national" className="px-3 py-1.5 text-sm rounded-lg border border-gray-200 text-gray-600 hover:border-green-300 hover:text-green-700 transition-colors">Augusta National</Link>
+              <Link href="/courses/tpc-sawgrass" className="px-3 py-1.5 text-sm rounded-lg border border-gray-200 text-gray-600 hover:border-green-300 hover:text-green-700 transition-colors">TPC Sawgrass</Link>
+              <Link href="/courses/pebble-beach" className="px-3 py-1.5 text-sm rounded-lg border border-gray-200 text-gray-600 hover:border-green-300 hover:text-green-700 transition-colors">Pebble Beach</Link>
+              <Link href="/courses/torrey-pines-south" className="px-3 py-1.5 text-sm rounded-lg border border-gray-200 text-gray-600 hover:border-green-300 hover:text-green-700 transition-colors">Torrey Pines South</Link>
+              <Link href="/courses/pinehurst-no2" className="px-3 py-1.5 text-sm rounded-lg border border-gray-200 text-gray-600 hover:border-green-300 hover:text-green-700 transition-colors">Pinehurst No. 2</Link>
+            </div>
           </div>
         </div>
       </main>

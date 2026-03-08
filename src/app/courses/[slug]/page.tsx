@@ -47,8 +47,33 @@ export default async function CourseProfilePage({ params }: PageProps) {
       ]
     : [];
 
+  const courseJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'SportsActivityLocation',
+    name: course.courseName,
+    url: `https://golf-dfs-optimizer.vercel.app/courses/${slug}`,
+    description: course.description,
+    address: {
+      '@type': 'PostalAddress',
+      addressLocality: course.location,
+    },
+    sport: 'Golf',
+    event: {
+      '@type': 'SportsEvent',
+      name: course.tournamentName,
+      location: {
+        '@type': 'Place',
+        name: course.courseName,
+      },
+    },
+  };
+
   return (
     <div className="min-h-screen bg-white">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(courseJsonLd) }}
+      />
       <Header currentSlug={slug} />
 
       <main className="max-w-4xl mx-auto px-4 py-12">
