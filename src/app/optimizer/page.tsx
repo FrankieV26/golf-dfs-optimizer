@@ -52,8 +52,12 @@ export default function OptimizerPage() {
       const res = await fetch(`/api/players?platform=${platform}`);
       const data = await res.json();
       if (data.error) throw new Error(data.error);
-      setGolfers(data.golfers || []);
+      const fetchedGolfers = data.golfers || [];
+      setGolfers(fetchedGolfers);
       setTournament(data.tournament || '');
+      if (fetchedGolfers.length === 0 && data.tournament) {
+        setError(`No active DraftKings slate found for ${data.tournament}. The main slate typically opens Tuesday or Wednesday before each tournament.`);
+      }
       setLockedIds(new Set());
       setExcludedIds(new Set());
       setLineups([]);
