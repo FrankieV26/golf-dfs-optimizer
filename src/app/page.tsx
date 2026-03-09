@@ -34,7 +34,7 @@ export default function HomePage() {
       {/* Header */}
       <header className="border-b border-gray-100">
         <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
-          <span className="text-xl font-bold text-green-700">BirdieVantage</span>
+          <span className="flex items-center gap-2 text-xl font-bold text-green-700"><img src="/logo-icon.svg" alt="" className="h-8 w-auto" />BirdieVantage</span>
           <nav className="flex gap-6 text-sm">
             <Link href="/optimizer" className="text-gray-600 hover:text-gray-800">
               Optimizer

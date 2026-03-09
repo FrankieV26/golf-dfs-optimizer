@@ -12,7 +12,7 @@ export default function StrategyPage() {
     <div className="min-h-screen bg-white">
       <header className="border-b border-gray-100">
         <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
-          <Link href="/" className="text-xl font-bold text-green-700">BirdieVantage</Link>
+          <Link href="/" className="flex items-center gap-2 text-xl font-bold text-green-700"><img src="/logo-icon.svg" alt="" className="h-8 w-auto" />BirdieVantage</Link>
           <nav className="flex gap-6 text-sm">
             <Link href="/optimizer" className="text-gray-600 hover:text-gray-800">Optimizer</Link>
             <Link href="/strategy" className="font-medium text-green-700">Strategy</Link>

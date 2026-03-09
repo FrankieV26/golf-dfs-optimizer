@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <!-- BirdieVantage icon: bird head profile -->
+  <!-- Head -->
+  <circle cx="28" cy="32" r="22" fill="#22c55e"/>
+  <!-- Beak -->
+  <path d="M48 30 L62 34 L48 38 Z" fill="#f59e0b"/>
+  <!-- Eye white -->
+  <circle cx="34" cy="28" r="6" fill="white"/>
+  <!-- Pupil -->
+  <circle cx="36" cy="27" r="3" fill="#111827"/>
+  <!-- Eye glint -->
+  <circle cx="37.5" cy="25.5" r="1.2" fill="white"/>
+  <!-- Small crest/tuft on top -->
+  <path d="M20 14 Q24 6 30 12 Q26 8 22 10 Z" fill="#16a34a"/>
+  <path d="M26 12 Q30 4 34 10 Q30 6 26 8 Z" fill="#16a34a"/>
+</svg>
