@@ -18,10 +18,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const golfer = getGolferBySlug(slug);
   if (!golfer) return {};
   return {
-    title: `${golfer.name} DFS Stats & Projections | BirdieLine`,
+    title: `${golfer.name} DFS Stats & Projections | BirdieVantage`,
     description: `${golfer.name} golf DFS profile — strokes gained breakdown, best course fits, DFS strategy tips, and recent results. Optimize your DraftKings and FanDuel golf lineups with ${golfer.name}'s data.`,
     openGraph: {
-      title: `${golfer.name} DFS Stats & Projections | BirdieLine`,
+      title: `${golfer.name} DFS Stats & Projections | BirdieVantage`,
       description: `Complete DFS profile for ${golfer.name} including strokes gained, course fits, and strategy tips.`,
       type: 'article',
     },
@@ -142,7 +142,7 @@ export default async function GolferProfilePage({ params }: PageProps) {
           <h2 className="text-2xl font-bold mb-4">Best Course Fits</h2>
           <p className="text-gray-600 mb-4">
             Courses where {golfer.name}&apos;s strokes gained profile aligns best with the
-            demands of the venue, based on BirdieLine&apos;s course-fit model.
+            demands of the venue, based on BirdieVantage&apos;s course-fit model.
           </p>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {bestCourses.map((c) => (
@@ -201,7 +201,7 @@ export default async function GolferProfilePage({ params }: PageProps) {
           </h3>
           <p className="text-gray-600 mb-4">
             Build optimized DraftKings and FanDuel golf lineups featuring {golfer.name} with
-            BirdieLine&apos;s free optimizer.
+            BirdieVantage&apos;s free optimizer.
           </p>
           <Link
             href="/optimizer"
@@ -246,7 +246,7 @@ function Header({ currentSlug }: { currentSlug: string }) {
   return (
     <header className="border-b border-gray-100">
       <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
-        <Link href="/" className="text-xl font-bold text-green-700">BirdieLine</Link>
+        <Link href="/" className="text-xl font-bold text-green-700">BirdieVantage</Link>
         <nav className="flex gap-6 text-sm">
           <Link href="/optimizer" className="text-gray-600 hover:text-gray-800">Optimizer</Link>
           <Link href="/strategy" className="text-gray-600 hover:text-gray-800">Strategy</Link>
@@ -263,7 +263,7 @@ function Footer() {
   return (
     <footer className="border-t border-gray-100 py-8 mt-12">
       <div className="max-w-6xl mx-auto px-4 flex items-center justify-between text-sm text-gray-500">
-        <span>BirdieLine &copy; {new Date().getFullYear()}</span>
+        <span>BirdieVantage &copy; {new Date().getFullYear()}</span>
         <div className="flex gap-6">
           <Link href="/optimizer" className="hover:text-gray-700">Optimizer</Link>
           <Link href="/strategy" className="hover:text-gray-700">Strategy</Link>

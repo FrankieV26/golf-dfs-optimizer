@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import {
   Golfer,
   Lineup,
@@ -10,11 +10,54 @@ import {
   PLATFORM_CONFIGS,
 } from '@/lib/types';
 import { SimulationResult } from '@/lib/simulation';
+import { normalizeName } from '@/lib/normalize-name';
 import GolferTable, { GolferSortField } from '@/components/GolferTable';
 import LineupResults from '@/components/LineupResults';
 import SimulationTable from '@/components/SimulationTable';
 
 type Tab = 'players' | 'simulation' | 'lineups';
+
+// ── CSV column detection (lenient) ──────────────────────
+function findCol(headers: string[], variants: string[]): number {
+  const lower = headers.map((h) => h.toLowerCase().trim());
+  for (const v of variants) {
+    const idx = lower.indexOf(v.toLowerCase());
+    if (idx !== -1) return idx;
+  }
+  return -1;
+}
+
+interface ParsedProjection {
+  name: string;
+  fppg: number;
+  ownership?: number;
+}
+
+function parseProjectionCSV(text: string): ParsedProjection[] {
+  const lines = text.split(/\r?\n/).filter((l) => l.trim());
+  if (lines.length < 2) return [];
+  // Split header; handle both comma and tab delimiters
+  const delim = lines[0].includes('\t') ? '\t' : ',';
+  const headers = lines[0].split(delim);
+  const nameIdx = findCol(headers, ['Name', 'Player', 'Player Name', 'Golfer']);
+  const projIdx = findCol(headers, ['Projection', 'Points', 'FPPG', 'Proj', 'FantasyPoints', 'Fantasy Points', 'FP', 'Pts']);
+  const ownIdx = findCol(headers, ['Ownership', 'Own', 'Own%', 'Ownership%', 'pOwn']);
+  if (nameIdx === -1 || projIdx === -1) return [];
+  const results: ParsedProjection[] = [];
+  for (let i = 1; i < lines.length; i++) {
+    const cols = lines[i].split(delim);
+    const rawName = cols[nameIdx]?.trim();
+    const rawProj = parseFloat(cols[projIdx]?.trim());
+    if (!rawName || isNaN(rawProj)) continue;
+    const entry: ParsedProjection = { name: rawName, fppg: rawProj };
+    if (ownIdx !== -1) {
+      const rawOwn = parseFloat(cols[ownIdx]?.trim().replace('%', ''));
+      if (!isNaN(rawOwn)) entry.ownership = rawOwn;
+    }
+    results.push(entry);
+  }
+  return results;
+}
 
 export default function OptimizerPage() {
   const [platform, setPlatform] = useState<Platform>('draftkings');
@@ -39,6 +82,11 @@ export default function OptimizerPage() {
   const [lockedIds, setLockedIds] = useState<Set<number>>(new Set());
   const [excludedIds, setExcludedIds] = useState<Set<number>>(new Set());
 
+  // Custom projections
+  const [customProjMsg, setCustomProjMsg] = useState<string | null>(null);
+  const [customProjCount, setCustomProjCount] = useState(0);
+  const projFileRef = useRef<HTMLInputElement>(null);
+
   // Sorting
   const [sortField, setSortField] = useState<GolferSortField>('fppg');
   const [sortDir, setSortDir] = useState<'asc' | 'desc'>('desc');
@@ -62,6 +110,8 @@ export default function OptimizerPage() {
       setExcludedIds(new Set());
       setLineups([]);
       setSimResults([]);
+      setCustomProjCount(0);
+      setCustomProjMsg(null);
       setActiveTab('players');
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Failed to load players');
@@ -96,6 +146,8 @@ export default function OptimizerPage() {
         setExcludedIds(new Set());
         setLineups([]);
         setSimResults([]);
+        setCustomProjCount(0);
+        setCustomProjMsg(null);
         setActiveTab('players');
       } catch (e) {
         setError(e instanceof Error ? e.message : 'Failed to parse CSV');
@@ -105,6 +157,109 @@ export default function OptimizerPage() {
     },
     []
   );
+
+  // ── Custom projection upload + blend ────────────────────
+  const handleProjectionUpload = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const file = e.target.files?.[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        const text = reader.result as string;
+        const parsed = parseProjectionCSV(text);
+        if (parsed.length === 0) {
+          setError('Could not parse projections CSV. Make sure it has "Name" and "Projection" (or "Points" / "FPPG") columns.');
+          return;
+        }
+        // Build a lookup by normalized name
+        const projMap = new Map<string, ParsedProjection>();
+        for (const p of parsed) {
+          projMap.set(normalizeName(p.name), p);
+        }
+        // Blend into current golfer pool
+        let matched = 0;
+        setGolfers((prev) =>
+          prev.map((g) => {
+            const norm = normalizeName(g.name);
+            const custom = projMap.get(norm);
+            if (!custom) {
+              // Remove any stale custom overlay, restoring originals
+              if (g.customProj) {
+                const origFppg = g.customProj.origFppg;
+                const origOwn = g.customProj.origOwnership;
+                return {
+                  ...g,
+                  fppg: origFppg,
+                  ownership: origOwn,
+                  value: Math.round((origFppg / g.salary) * 1000 * 100) / 100,
+                  customProj: undefined,
+                };
+              }
+              return g;
+            }
+            matched++;
+            const hasDg = g.dg != null;
+            const blended = hasDg;
+            // Save the current fppg before we overwrite (use stored original if re-uploading)
+            const origFppg = g.customProj ? g.customProj.origFppg : g.fppg;
+            const origOwnership = g.customProj ? g.customProj.origOwnership : g.ownership;
+            // 50/50 blend when DG data exists, otherwise use custom directly
+            const newFppg = hasDg
+              ? (custom.fppg + g.dg!.projPoints) / 2
+              : custom.fppg;
+            const newOwnership =
+              custom.ownership != null
+                ? hasDg && g.dg!.projOwnership != null
+                  ? (custom.ownership + g.dg!.projOwnership) / 2
+                  : custom.ownership
+                : origOwnership;
+            return {
+              ...g,
+              fppg: Math.round(newFppg * 100) / 100,
+              ownership: newOwnership != null ? Math.round(newOwnership * 100) / 100 : undefined,
+              value: Math.round((newFppg / g.salary) * 1000 * 100) / 100,
+              customProj: {
+                fppg: custom.fppg,
+                ownership: custom.ownership,
+                blended,
+                origFppg,
+                origOwnership,
+              },
+            };
+          })
+        );
+        setCustomProjCount(matched);
+        setCustomProjMsg(`${matched} of ${parsed.length} players matched`);
+        setLineups([]);
+        setSimResults([]);
+      };
+      reader.readAsText(file);
+      // Reset input so the same file can be re-uploaded
+      if (projFileRef.current) projFileRef.current.value = '';
+    },
+    []
+  );
+
+  const clearCustomProjections = useCallback(() => {
+    setGolfers((prev) =>
+      prev.map((g) => {
+        if (!g.customProj) return g;
+        const origFppg = g.customProj.origFppg;
+        const origOwn = g.customProj.origOwnership;
+        return {
+          ...g,
+          fppg: origFppg,
+          ownership: origOwn,
+          value: Math.round((origFppg / g.salary) * 1000 * 100) / 100,
+          customProj: undefined,
+        };
+      })
+    );
+    setCustomProjCount(0);
+    setCustomProjMsg(null);
+    setLineups([]);
+    setSimResults([]);
+  }, []);
 
   const runSimulation = useCallback(async () => {
     if (golfers.length < 6) return;
@@ -216,7 +371,7 @@ export default function OptimizerPage() {
     <div className="min-h-screen bg-gray-50">
       <header className="bg-white border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
-          <a href="/" className="text-xl font-bold text-green-700">BirdieLine</a>
+          <a href="/" className="text-xl font-bold text-green-700">BirdieVantage</a>
           <nav className="flex gap-6 text-sm">
             <a href="/optimizer" className="font-medium text-green-700">Optimizer</a>
             <a href="/strategy" className="text-gray-600 hover:text-gray-800">Strategy</a>
@@ -308,8 +463,8 @@ export default function OptimizerPage() {
             </div>
           </div>
 
-          {(lockedIds.size > 0 || excludedIds.size > 0) && (
-            <div className="mt-4 flex gap-4 text-sm">
+          {(lockedIds.size > 0 || excludedIds.size > 0 || customProjCount > 0) && (
+            <div className="mt-4 flex flex-wrap gap-4 text-sm items-center">
               {lockedIds.size > 0 && (
                 <span className="px-2 py-1 bg-green-100 text-green-800 rounded">
                   {lockedIds.size} locked
@@ -320,8 +475,20 @@ export default function OptimizerPage() {
                   {excludedIds.size} excluded
                 </span>
               )}
+              {customProjCount > 0 && (
+                <span className="px-2 py-1 bg-amber-100 text-amber-800 rounded inline-flex items-center gap-1.5">
+                  Custom Proj ({customProjCount})
+                  <button
+                    onClick={clearCustomProjections}
+                    className="text-amber-600 hover:text-amber-900 font-bold leading-none"
+                    title="Remove custom projections"
+                  >
+                    x
+                  </button>
+                </span>
+              )}
               <button
-                onClick={() => { setLockedIds(new Set()); setExcludedIds(new Set()); }}
+                onClick={() => { setLockedIds(new Set()); setExcludedIds(new Set()); if (customProjCount > 0) clearCustomProjections(); }}
                 className="text-gray-500 hover:text-gray-700 underline"
               >
                 Clear all
@@ -331,7 +498,7 @@ export default function OptimizerPage() {
 
           {/* Action buttons */}
           {golfers.length > 0 && (
-            <div className="mt-4 flex flex-col sm:flex-row gap-3">
+            <div className="mt-4 flex flex-col sm:flex-row gap-3 items-start">
               <button
                 onClick={runSimulation} disabled={simulating}
                 className="px-5 py-2.5 bg-purple-600 text-white rounded-lg text-sm font-medium hover:bg-purple-700 disabled:opacity-50 flex items-center justify-center gap-2"
@@ -346,6 +513,20 @@ export default function OptimizerPage() {
                 {loading && <span className="inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />}
                 {loading ? 'Optimizing...' : 'Generate Lineups'}
               </button>
+              <button
+                onClick={() => projFileRef.current?.click()}
+                className="px-5 py-2.5 border border-amber-400 text-amber-700 rounded-lg text-sm font-medium hover:bg-amber-50 flex items-center justify-center gap-2"
+                title="Upload a CSV with your own projections to blend with Data Golf data"
+              >
+                Upload Projections
+              </button>
+              <input
+                ref={projFileRef}
+                type="file"
+                accept=".csv,.tsv,.txt"
+                className="hidden"
+                onChange={handleProjectionUpload}
+              />
             </div>
           )}
         </div>
@@ -353,6 +534,21 @@ export default function OptimizerPage() {
         {error && (
           <div className="bg-red-50 border border-red-200 text-red-700 rounded-lg px-4 py-3 mb-6 text-sm">
             {error}
+          </div>
+        )}
+
+        {customProjMsg && (
+          <div className="bg-amber-50 border border-amber-200 text-amber-800 rounded-lg px-4 py-3 mb-6 text-sm flex items-center justify-between">
+            <span>
+              Custom projections loaded: <strong>{customProjMsg}</strong>.
+              {' '}Players with Data Golf data use a 50/50 blend.
+            </span>
+            <button
+              onClick={() => setCustomProjMsg(null)}
+              className="ml-4 text-amber-600 hover:text-amber-900 font-bold"
+            >
+              Dismiss
+            </button>
           </div>
         )}
 

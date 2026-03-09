@@ -18,10 +18,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const course = getCourseBySlug(slug);
   if (!course) return {};
   return {
-    title: `${course.courseName} DFS Breakdown | BirdieLine`,
+    title: `${course.courseName} DFS Breakdown | BirdieVantage`,
     description: `${course.courseName} DFS analysis for the ${course.tournamentName}. Course-fit weights, key stats, historical winners, and DFS strategy tips for DraftKings and FanDuel golf.`,
     openGraph: {
-      title: `${course.courseName} DFS Breakdown | BirdieLine`,
+      title: `${course.courseName} DFS Breakdown | BirdieVantage`,
       description: `Complete DFS breakdown for ${course.tournamentName} at ${course.courseName}.`,
       type: 'article',
     },
@@ -109,7 +109,7 @@ export default async function CourseProfilePage({ params }: PageProps) {
         <section className="mb-12">
           <h2 className="text-2xl font-bold mb-4">Course Fit Profile</h2>
           <p className="text-gray-600 mb-6">
-            BirdieLine&apos;s course-fit model assigns weights to each strokes gained category based on
+            BirdieVantage&apos;s course-fit model assigns weights to each strokes gained category based on
             historical performance data at {course.courseName}. Higher weights indicate
             categories that matter more for success at this venue.
           </p>
@@ -217,7 +217,7 @@ export default async function CourseProfilePage({ params }: PageProps) {
           <h2 className="text-2xl font-bold mb-4">Top Golfer Fits for {course.courseName}</h2>
           <p className="text-gray-600 mb-4">
             Golfers whose strokes gained profiles align best with the demands of this course,
-            based on BirdieLine&apos;s course-fit model.
+            based on BirdieVantage&apos;s course-fit model.
           </p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {topGolfers.map((g) => (
@@ -248,7 +248,7 @@ export default async function CourseProfilePage({ params }: PageProps) {
             Build Your {course.tournamentName} Lineup
           </h3>
           <p className="text-gray-600 mb-4">
-            Use BirdieLine&apos;s optimizer with built-in course-fit scoring for{' '}
+            Use BirdieVantage&apos;s optimizer with built-in course-fit scoring for{' '}
             {course.courseName} to generate optimal DraftKings and FanDuel lineups.
           </p>
           <Link
@@ -289,7 +289,7 @@ function Header({ currentSlug }: { currentSlug: string }) {
   return (
     <header className="border-b border-gray-100">
       <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
-        <Link href="/" className="text-xl font-bold text-green-700">BirdieLine</Link>
+        <Link href="/" className="text-xl font-bold text-green-700">BirdieVantage</Link>
         <nav className="flex gap-6 text-sm">
           <Link href="/optimizer" className="text-gray-600 hover:text-gray-800">Optimizer</Link>
           <Link href="/strategy" className="text-gray-600 hover:text-gray-800">Strategy</Link>
@@ -306,7 +306,7 @@ function Footer() {
   return (
     <footer className="border-t border-gray-100 py-8 mt-12">
       <div className="max-w-6xl mx-auto px-4 flex items-center justify-between text-sm text-gray-500">
-        <span>BirdieLine &copy; {new Date().getFullYear()}</span>
+        <span>BirdieVantage &copy; {new Date().getFullYear()}</span>
         <div className="flex gap-6">
           <Link href="/optimizer" className="hover:text-gray-700">Optimizer</Link>
           <Link href="/strategy" className="hover:text-gray-700">Strategy</Link>

@@ -8,8 +8,8 @@ const geistMono = Geist_Mono({ variable: '--font-geist-mono', subsets: ['latin']
 export const metadata: Metadata = {
   metadataBase: new URL('https://birdievantage.com'),
   title: {
-    default: 'BirdieLine - Free Golf DFS Lineup Optimizer for DraftKings & FanDuel',
-    template: '%s | BirdieLine',
+    default: 'BirdieVantage - Free Golf DFS Lineup Optimizer for DraftKings & FanDuel',
+    template: '%s | BirdieVantage',
   },
   description:
     'Free golf DFS lineup optimizer for DraftKings and FanDuel. Generate optimal PGA lineups with advanced analytics, ownership projections, and course-fit scoring. Updated weekly for every tournament.',
@@ -29,25 +29,25 @@ export const metadata: Metadata = {
     canonical: '/',
   },
   openGraph: {
-    title: 'BirdieLine - Free Golf DFS Lineup Optimizer',
+    title: 'BirdieVantage - Free Golf DFS Lineup Optimizer',
     description:
       'Generate optimal DraftKings & FanDuel golf lineups in seconds. Free optimizer with advanced analytics.',
     type: 'website',
     locale: 'en_US',
-    siteName: 'BirdieLine',
+    siteName: 'BirdieVantage',
     url: 'https://birdievantage.com',
     images: [
       {
         url: '/api/og',
         width: 1200,
         height: 630,
-        alt: 'BirdieLine - Free Golf DFS Lineup Optimizer',
+        alt: 'BirdieVantage - Free Golf DFS Lineup Optimizer',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'BirdieLine - Free Golf DFS Lineup Optimizer',
+    title: 'BirdieVantage - Free Golf DFS Lineup Optimizer',
     description:
       'Generate optimal DraftKings & FanDuel golf lineups in seconds.',
     images: ['/api/og'],
@@ -58,7 +58,7 @@ export const metadata: Metadata = {
 const websiteJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'WebSite',
-  name: 'BirdieLine',
+  name: 'BirdieVantage',
   url: 'https://birdievantage.com',
   description:
     'Free golf DFS lineup optimizer for DraftKings and FanDuel. Generate optimal PGA lineups with advanced analytics, ownership projections, and course-fit scoring.',
@@ -72,7 +72,7 @@ const websiteJsonLd = {
 const organizationJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'Organization',
-  name: 'BirdieLine',
+  name: 'BirdieVantage',
   url: 'https://birdievantage.com',
   description:
     'Free golf DFS lineup optimizer with course-fit scoring, Monte Carlo simulation, and ownership-aware optimization.',

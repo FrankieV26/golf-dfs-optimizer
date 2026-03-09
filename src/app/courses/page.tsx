@@ -4,7 +4,7 @@ import { getAllCourses } from '@/lib/course-data';
 import { COURSE_PROFILES } from '@/lib/course-fit';
 
 export const metadata: Metadata = {
-  title: 'PGA Tour Course DFS Breakdowns | BirdieLine',
+  title: 'PGA Tour Course DFS Breakdowns | BirdieVantage',
   description:
     'DFS course breakdowns for top PGA Tour venues. Course-fit weights, key stats, historical winners, and DFS strategy tips for DraftKings and FanDuel golf.',
 };
@@ -16,7 +16,7 @@ export default function CoursesIndexPage() {
     <div className="min-h-screen bg-white">
       <header className="border-b border-gray-100">
         <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
-          <Link href="/" className="text-xl font-bold text-green-700">BirdieLine</Link>
+          <Link href="/" className="text-xl font-bold text-green-700">BirdieVantage</Link>
           <nav className="flex gap-6 text-sm">
             <Link href="/optimizer" className="text-gray-600 hover:text-gray-800">Optimizer</Link>
             <Link href="/strategy" className="text-gray-600 hover:text-gray-800">Strategy</Link>
@@ -82,7 +82,7 @@ export default function CoursesIndexPage() {
               DFS strategy.
             </p>
             <p>
-              BirdieLine&apos;s course-fit model assigns weights to four strokes gained
+              BirdieVantage&apos;s course-fit model assigns weights to four strokes gained
               categories — off the tee, approach, around the green, and putting — based on
               historical performance data at each venue. These weights tell you which skills
               matter most for success at each course, allowing you to match{' '}
@@ -112,7 +112,7 @@ export default function CoursesIndexPage() {
         <div className="mt-12 p-6 bg-green-50 rounded-xl text-center">
           <h3 className="text-lg font-bold mb-2">Optimize with Course-Fit Scoring</h3>
           <p className="text-gray-600 mb-4">
-            BirdieLine&apos;s optimizer automatically applies course-fit weights to rank
+            BirdieVantage&apos;s optimizer automatically applies course-fit weights to rank
             golfers by how well their profile matches this week&apos;s venue.
           </p>
           <Link
@@ -126,7 +126,7 @@ export default function CoursesIndexPage() {
 
       <footer className="border-t border-gray-100 py-8 mt-12">
         <div className="max-w-6xl mx-auto px-4 flex items-center justify-between text-sm text-gray-500">
-          <span>BirdieLine &copy; {new Date().getFullYear()}</span>
+          <span>BirdieVantage &copy; {new Date().getFullYear()}</span>
           <div className="flex gap-6">
             <Link href="/optimizer" className="hover:text-gray-700">Optimizer</Link>
             <Link href="/strategy" className="hover:text-gray-700">Strategy</Link>

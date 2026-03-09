@@ -8,6 +8,8 @@
 // Rate limit: 45 req/min (5-min suspension if exceeded)
 // ──────────────────────────────────────────────
 
+import { normalizeName } from './normalize-name';
+
 const BASE = 'https://feeds.datagolf.com';
 
 function apiKey(): string {
@@ -270,20 +272,8 @@ export async function fetchLiveResults(tour = 'pga'): Promise<{
 
 // ── Name Matching ────────────────────────────
 
-/**
- * Normalize a player name for fuzzy matching.
- * Data Golf: "Scheffler, Scottie"
- * DraftKings: "Scottie Scheffler"
- * FanDuel:    "Scottie Scheffler"
- */
-export function normalizeName(name: string): string {
-  // Handle "Last, First" format
-  if (name.includes(',')) {
-    const [last, first] = name.split(',').map(s => s.trim());
-    return `${first} ${last}`.toLowerCase().replace(/[^a-z ]/g, '').replace(/\s+/g, ' ').trim();
-  }
-  return name.toLowerCase().replace(/[^a-z ]/g, '').replace(/\s+/g, ' ').trim();
-}
+// Re-export from the shared client-safe module so existing imports still work.
+export { normalizeName } from './normalize-name';
 
 /**
  * Build a lookup map from normalized name to Data Golf data.

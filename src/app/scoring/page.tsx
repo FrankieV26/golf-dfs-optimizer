@@ -12,7 +12,7 @@ export default function ScoringPage() {
     <div className="min-h-screen bg-white">
       <header className="border-b border-gray-100">
         <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
-          <Link href="/" className="text-xl font-bold text-green-700">BirdieLine</Link>
+          <Link href="/" className="text-xl font-bold text-green-700">BirdieVantage</Link>
           <nav className="flex gap-6 text-sm">
             <Link href="/optimizer" className="text-gray-600 hover:text-gray-800">Optimizer</Link>
             <Link href="/strategy" className="text-gray-600 hover:text-gray-800">Strategy</Link>
@@ -154,7 +154,7 @@ export default function ScoringPage() {
             Optimize for the Right Platform
           </h3>
           <p className="text-gray-600 mb-4">
-            BirdieLine automatically applies the correct scoring rules for DraftKings or FanDuel.
+            BirdieVantage automatically applies the correct scoring rules for DraftKings or FanDuel.
           </p>
           <Link
             href="/optimizer"
@@ -201,7 +201,7 @@ export default function ScoringPage() {
 
       <footer className="border-t border-gray-100 py-8 mt-12">
         <div className="max-w-6xl mx-auto px-4 flex items-center justify-between text-sm text-gray-500">
-          <span>BirdieLine &copy; {new Date().getFullYear()}</span>
+          <span>BirdieVantage &copy; {new Date().getFullYear()}</span>
           <div className="flex gap-6">
             <Link href="/optimizer" className="hover:text-gray-700">Optimizer</Link>
             <Link href="/strategy" className="hover:text-gray-700">Strategy</Link>

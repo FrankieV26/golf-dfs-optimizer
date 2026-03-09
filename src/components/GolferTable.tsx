@@ -139,6 +139,18 @@ export default function GolferTable({
                       DG
                     </span>
                   )}
+                  {g.customProj && (
+                    <span
+                      className="ml-1 inline-flex items-center px-1.5 py-0.5 text-[10px] font-bold rounded bg-amber-100 text-amber-700"
+                      title={
+                        g.customProj.blended
+                          ? `Custom proj: ${g.customProj.fppg.toFixed(1)} pts (50/50 blend with DG)`
+                          : `Custom proj: ${g.customProj.fppg.toFixed(1)} pts`
+                      }
+                    >
+                      CP
+                    </span>
+                  )}
                 </td>
                 <td className="px-3 py-1.5">${g.salary.toLocaleString()}</td>
                 <td className="px-3 py-1.5">{g.fppg.toFixed(1)}</td>

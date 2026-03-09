@@ -12,7 +12,7 @@ export default function StrategyPage() {
     <div className="min-h-screen bg-white">
       <header className="border-b border-gray-100">
         <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
-          <Link href="/" className="text-xl font-bold text-green-700">BirdieLine</Link>
+          <Link href="/" className="text-xl font-bold text-green-700">BirdieVantage</Link>
           <nav className="flex gap-6 text-sm">
             <Link href="/optimizer" className="text-gray-600 hover:text-gray-800">Optimizer</Link>
             <Link href="/strategy" className="font-medium text-green-700">Strategy</Link>
@@ -50,7 +50,7 @@ export default function StrategyPage() {
               <li><strong>SG: Putting</strong> — Surface-dependent (bentgrass vs bermuda vs poa). Check the grass type before weighting this.</li>
             </ul>
             <p>
-              BirdieLine&apos;s course-fit model automatically weights these categories based
+              BirdieVantage&apos;s course-fit model automatically weights these categories based
               on the week&apos;s venue and ranks golfers by how well their profile matches.
             </p>
           </Section>
@@ -135,7 +135,7 @@ export default function StrategyPage() {
           <div className="mt-12 p-6 bg-green-50 rounded-xl text-center">
             <h3 className="text-lg font-bold mb-2">Ready to Apply These Strategies?</h3>
             <p className="text-gray-600 mb-4">
-              BirdieLine&apos;s optimizer has course-fit scoring, Monte Carlo simulation, and
+              BirdieVantage&apos;s optimizer has course-fit scoring, Monte Carlo simulation, and
               ownership-aware GPP optimization built in. Free to use.
             </p>
             <Link
@@ -177,7 +177,7 @@ export default function StrategyPage() {
 
       <footer className="border-t border-gray-100 py-8 mt-12">
         <div className="max-w-6xl mx-auto px-4 flex items-center justify-between text-sm text-gray-500">
-          <span>BirdieLine &copy; {new Date().getFullYear()}</span>
+          <span>BirdieVantage &copy; {new Date().getFullYear()}</span>
           <div className="flex gap-6">
             <Link href="/optimizer" className="hover:text-gray-700">Optimizer</Link>
             <Link href="/strategy" className="hover:text-gray-700">Strategy</Link>

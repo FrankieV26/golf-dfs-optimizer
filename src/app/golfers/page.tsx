@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { getAllGolfers } from '@/lib/golfer-data';
 
 export const metadata: Metadata = {
-  title: 'PGA Tour Golfer DFS Profiles | BirdieLine',
+  title: 'PGA Tour Golfer DFS Profiles | BirdieVantage',
   description:
     'Browse DFS profiles for top PGA Tour golfers. Strokes gained breakdowns, course fits, DFS strategy tips, and recent results for DraftKings and FanDuel golf lineups.',
 };
@@ -15,7 +15,7 @@ export default function GolfersIndexPage() {
     <div className="min-h-screen bg-white">
       <header className="border-b border-gray-100">
         <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
-          <Link href="/" className="text-xl font-bold text-green-700">BirdieLine</Link>
+          <Link href="/" className="text-xl font-bold text-green-700">BirdieVantage</Link>
           <nav className="flex gap-6 text-sm">
             <Link href="/optimizer" className="text-gray-600 hover:text-gray-800">Optimizer</Link>
             <Link href="/strategy" className="text-gray-600 hover:text-gray-800">Strategy</Link>
@@ -107,7 +107,7 @@ export default function GolfersIndexPage() {
             </p>
             <p>
               Each golfer profile above includes their best and worst course fits based on
-              BirdieLine&apos;s course-fit model, which weights strokes gained categories
+              BirdieVantage&apos;s course-fit model, which weights strokes gained categories
               according to historical performance data at each venue. Use these profiles
               alongside the{' '}
               <Link href="/courses" className="text-green-700 hover:underline">
@@ -126,7 +126,7 @@ export default function GolfersIndexPage() {
         <div className="mt-12 p-6 bg-green-50 rounded-xl text-center">
           <h3 className="text-lg font-bold mb-2">Ready to Build Your Lineup?</h3>
           <p className="text-gray-600 mb-4">
-            Use BirdieLine&apos;s free optimizer with course-fit scoring and Monte Carlo
+            Use BirdieVantage&apos;s free optimizer with course-fit scoring and Monte Carlo
             simulation to generate optimal DraftKings and FanDuel golf lineups.
           </p>
           <Link
@@ -140,7 +140,7 @@ export default function GolfersIndexPage() {
 
       <footer className="border-t border-gray-100 py-8 mt-12">
         <div className="max-w-6xl mx-auto px-4 flex items-center justify-between text-sm text-gray-500">
-          <span>BirdieLine &copy; {new Date().getFullYear()}</span>
+          <span>BirdieVantage &copy; {new Date().getFullYear()}</span>
           <div className="flex gap-6">
             <Link href="/optimizer" className="hover:text-gray-700">Optimizer</Link>
             <Link href="/strategy" className="hover:text-gray-700">Strategy</Link>

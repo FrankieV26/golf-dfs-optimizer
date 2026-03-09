@@ -37,6 +37,14 @@ export interface Golfer {
     top20Prob: number;
     makeCutProb: number;
   };
+  // Custom projection overlay (set when user uploads their own CSV)
+  customProj?: {
+    fppg: number;            // user's raw projection (before blending)
+    ownership?: number;      // user's ownership estimate, if provided
+    blended: boolean;        // true = 50/50 blend with DG, false = custom-only
+    origFppg: number;        // original fppg before blending (for restore on clear)
+    origOwnership?: number;  // original ownership before blending
+  };
 }
 
 export interface Lineup {

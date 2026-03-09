@@ -1,36 +1,42 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# BirdieVantage
 
-## Getting Started
+Free golf DFS lineup optimizer for DraftKings and FanDuel.
 
-First, run the development server:
+**Live at [birdievantage.com](https://birdievantage.com)**
+
+## Features
+
+- **Branch-and-bound optimizer** -- generates optimal 6-golfer lineups under salary cap
+- **Monte Carlo simulation** -- 10,000-sim tournament model blended with Data Golf probabilities
+- **Data Golf integration** -- real strokes-gained data, projections, ownership, course fit adjustments
+- **Course-fit scoring** -- SG weights per venue (OTT, APP, ARG, Putt)
+- **Ownership leverage** -- GPP mode with projected ownership to build contrarian lineups
+- **Multi-lineup generation** -- up to 20 lineups with max exposure controls
+- **DraftKings live slate** -- auto-fetches current contest pool via DK API
+- **FanDuel CSV upload** -- import FanDuel player pools
+- **Custom projection upload** -- blend your own CSV projections with Data Golf data
+- **DK-compatible export** -- one-click CSV export in DraftKings upload format
+- **55 SEO pages** -- 30 golfer profiles, 8 course breakdowns, strategy and scoring guides
+
+## Tech Stack
+
+- Next.js 16, TypeScript, Tailwind CSS
+- Data Golf API (Scratch PLUS)
+- Supabase (weekly snapshot collection for backtesting)
+- Vercel (hosting + cron jobs)
+
+## Development
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev    # http://localhost:3001
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Environment Variables
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```
+DATAGOLF_API_KEY=
+SUPABASE_URL=
+SUPABASE_SERVICE_ROLE_KEY=
+CRON_SECRET=
+```

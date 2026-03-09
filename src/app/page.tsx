@@ -3,7 +3,7 @@ import Link from 'next/link';
 const softwareAppJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'SoftwareApplication',
-  name: 'BirdieLine Golf DFS Optimizer',
+  name: 'BirdieVantage Golf DFS Optimizer',
   applicationCategory: 'SportsApplication',
   operatingSystem: 'Web',
   offers: {
@@ -34,7 +34,7 @@ export default function HomePage() {
       {/* Header */}
       <header className="border-b border-gray-100">
         <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
-          <span className="text-xl font-bold text-green-700">BirdieLine</span>
+          <span className="text-xl font-bold text-green-700">BirdieVantage</span>
           <nav className="flex gap-6 text-sm">
             <Link href="/optimizer" className="text-gray-600 hover:text-gray-800">
               Optimizer
@@ -62,9 +62,9 @@ export default function HomePage() {
           <span className="text-green-700">That Actually Works</span>
         </h1>
         <p className="text-xl text-gray-600 mb-10 max-w-2xl mx-auto">
-          Generate optimal DraftKings and FanDuel golf lineups in seconds.
-          Course-fit analysis, ownership leverage, and Monte Carlo simulation
-          — no subscription required.
+          Powered by Data Golf projections and strokes-gained data. Course-fit
+          analysis, ownership leverage, and Monte Carlo simulation — the same
+          features paid tools charge $40&#8211;100+/month for, completely free.
         </p>
         <div className="flex gap-4 justify-center flex-wrap">
           <Link
@@ -113,6 +113,48 @@ export default function HomePage() {
               title="Export to CSV"
               description="Download lineups as CSV files ready for direct upload to DraftKings or FanDuel contest lobbies. No copy-paste."
             />
+            <FeatureCard
+              title="Data Golf Powered"
+              description="Projections and strokes-gained data come from Data Golf — the gold standard in golf analytics. Real statistical models, not crowd-sourced or hand-curated numbers."
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* Competitive Comparison */}
+      <section className="py-20">
+        <div className="max-w-4xl mx-auto px-4">
+          <h2 className="text-3xl font-bold text-center mb-4">
+            Paid-Tool Features. $0 Price Tag.
+          </h2>
+          <p className="text-gray-600 text-center mb-10 max-w-2xl mx-auto">
+            Other golf DFS optimizers charge $40&#8211;100+/month for the features
+            BirdieVantage includes for free.
+          </p>
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm border border-gray-200 rounded-xl overflow-hidden">
+              <thead>
+                <tr className="bg-gray-100 text-left">
+                  <th className="px-5 py-3 font-semibold text-gray-700">Feature</th>
+                  <th className="px-5 py-3 font-semibold text-green-700 text-center">BirdieVantage</th>
+                  <th className="px-5 py-3 font-semibold text-gray-500 text-center">Paid Tools ($40&#8211;297/mo)</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-100">
+                <ComparisonRow feature="Branch-and-bound optimizer" free paid />
+                <ComparisonRow feature="Monte Carlo simulation (10,000+ sims)" free paid />
+                <ComparisonRow feature="Data Golf projections & SG data" free paid />
+                <ComparisonRow feature="Course-fit scoring" free paid />
+                <ComparisonRow feature="Ownership leverage for GPPs" free paid />
+                <ComparisonRow feature="DraftKings auto-fetch + FanDuel CSV" free paid />
+                <ComparisonRow feature="Multi-lineup generation & exposure controls" free paid />
+                <tr className="bg-gray-50">
+                  <td className="px-5 py-3 font-semibold text-gray-800">Price</td>
+                  <td className="px-5 py-3 text-center font-bold text-green-700">Free</td>
+                  <td className="px-5 py-3 text-center font-semibold text-gray-500">$40&#8211;297/mo</td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
       </section>
@@ -121,7 +163,7 @@ export default function HomePage() {
       <section className="py-20">
         <div className="max-w-4xl mx-auto px-4">
           <h2 className="text-3xl font-bold text-center mb-12">
-            How BirdieLine Works
+            How BirdieVantage Works
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
             <Step
@@ -158,7 +200,7 @@ export default function HomePage() {
               take hours to do by hand.
             </p>
             <p>
-              BirdieLine&apos;s optimizer uses a branch-and-bound algorithm with Monte
+              BirdieVantage&apos;s optimizer uses a branch-and-bound algorithm with Monte
               Carlo tournament simulation, evaluating millions of combinations in
               milliseconds. Combined with course-fit scoring and ownership projections,
               it gives you a real edge in GPP tournaments.
@@ -184,17 +226,26 @@ export default function HomePage() {
               $60,000 salary cap.
             </p>
             <h3 className="text-xl font-semibold text-gray-800 mt-8">
-              What Makes BirdieLine Different?
+              What Makes BirdieVantage Different?
             </h3>
             <p>
               Most free golf DFS optimizers just find the highest projected-points lineup
-              under the salary cap. BirdieLine goes further with three features borrowed
+              under the salary cap. BirdieVantage goes further with three features borrowed
               from the paid tools: course-fit scoring evaluates each golfer&apos;s
               strokes-gained profile against the week&apos;s course demands. Monte Carlo
               simulation models cut-line probability and scoring distributions rather than
               using a single-point projection. And ownership-aware optimization builds
               lineups that maximize expected ROI in GPP tournaments, not just raw fantasy
               points.
+            </p>
+            <p>
+              Paid golf DFS tools like SaberSim, FantasyLabs, and RotoGrinders
+              charge between $40 and $297 per month for access to similar optimizer
+              features, projections, and simulation engines. BirdieVantage provides
+              the same core capabilities — branch-and-bound optimization, 10,000+
+              Monte Carlo simulations, Data Golf projections, course-fit scoring,
+              and ownership leverage — at no cost. No subscription, no account
+              required.
             </p>
           </div>
         </div>
@@ -217,7 +268,7 @@ export default function HomePage() {
       {/* Footer */}
       <footer className="border-t border-gray-100 py-8">
         <div className="max-w-6xl mx-auto px-4 flex items-center justify-between text-sm text-gray-500">
-          <span>BirdieLine &copy; {new Date().getFullYear()}</span>
+          <span>BirdieVantage &copy; {new Date().getFullYear()}</span>
           <div className="flex gap-6">
             <Link href="/optimizer" className="hover:text-gray-700">Optimizer</Link>
             <Link href="/strategy" className="hover:text-gray-700">Strategy</Link>
@@ -249,5 +300,27 @@ function Step({ num, title, description }: { num: number; title: string; descrip
       <h3 className="text-lg font-bold mb-2">{title}</h3>
       <p className="text-gray-600 text-sm">{description}</p>
     </div>
+  );
+}
+
+function ComparisonRow({ feature, free, paid }: { feature: string; free: boolean; paid: boolean }) {
+  return (
+    <tr>
+      <td className="px-5 py-3 text-gray-700">{feature}</td>
+      <td className="px-5 py-3 text-center">
+        {free ? (
+          <span className="text-green-700 font-bold" aria-label="Included">&#10003;</span>
+        ) : (
+          <span className="text-gray-300">&#8212;</span>
+        )}
+      </td>
+      <td className="px-5 py-3 text-center">
+        {paid ? (
+          <span className="text-gray-500 font-semibold">$$</span>
+        ) : (
+          <span className="text-gray-300">&#8212;</span>
+        )}
+      </td>
+    </tr>
   );
 }
