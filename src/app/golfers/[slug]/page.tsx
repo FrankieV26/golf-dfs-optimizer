@@ -45,7 +45,7 @@ export default async function GolferProfilePage({ params }: PageProps) {
     '@context': 'https://schema.org',
     '@type': 'Person',
     name: golfer.name,
-    url: `https://golf-dfs-optimizer.vercel.app/golfers/${slug}`,
+    url: `https://birdievantage.com/golfers/${slug}`,
     nationality: golfer.country,
     jobTitle: 'Professional Golfer',
     description: `${golfer.name} — World #${golfer.worldRanking} professional golfer from ${golfer.country}. Strokes Gained Total: ${golfer.strokesGained.total >= 0 ? '+' : ''}${golfer.strokesGained.total.toFixed(2)}.`,

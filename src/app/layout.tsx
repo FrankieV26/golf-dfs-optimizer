@@ -6,7 +6,7 @@ const geistSans = Geist({ variable: '--font-geist-sans', subsets: ['latin'] });
 const geistMono = Geist_Mono({ variable: '--font-geist-mono', subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://golf-dfs-optimizer.vercel.app'),
+  metadataBase: new URL('https://birdievantage.com'),
   title: {
     default: 'BirdieLine - Free Golf DFS Lineup Optimizer for DraftKings & FanDuel',
     template: '%s | BirdieLine',
@@ -35,7 +35,7 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'en_US',
     siteName: 'BirdieLine',
-    url: 'https://golf-dfs-optimizer.vercel.app',
+    url: 'https://birdievantage.com',
     images: [
       {
         url: '/api/og',
@@ -59,12 +59,12 @@ const websiteJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'WebSite',
   name: 'BirdieLine',
-  url: 'https://golf-dfs-optimizer.vercel.app',
+  url: 'https://birdievantage.com',
   description:
     'Free golf DFS lineup optimizer for DraftKings and FanDuel. Generate optimal PGA lineups with advanced analytics, ownership projections, and course-fit scoring.',
   potentialAction: {
     '@type': 'SearchAction',
-    target: 'https://golf-dfs-optimizer.vercel.app/golfers/{search_term_string}',
+    target: 'https://birdievantage.com/golfers/{search_term_string}',
     'query-input': 'required name=search_term_string',
   },
 };
@@ -73,7 +73,7 @@ const organizationJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'Organization',
   name: 'BirdieLine',
-  url: 'https://golf-dfs-optimizer.vercel.app',
+  url: 'https://birdievantage.com',
   description:
     'Free golf DFS lineup optimizer with course-fit scoring, Monte Carlo simulation, and ownership-aware optimization.',
 };

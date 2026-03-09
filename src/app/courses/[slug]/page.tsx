@@ -51,7 +51,7 @@ export default async function CourseProfilePage({ params }: PageProps) {
     '@context': 'https://schema.org',
     '@type': 'SportsActivityLocation',
     name: course.courseName,
-    url: `https://golf-dfs-optimizer.vercel.app/courses/${slug}`,
+    url: `https://birdievantage.com/courses/${slug}`,
     description: course.description,
     address: {
       '@type': 'PostalAddress',

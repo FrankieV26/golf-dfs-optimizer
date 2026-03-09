@@ -13,7 +13,7 @@ const softwareAppJsonLd = {
   },
   description:
     'Free golf DFS lineup optimizer for DraftKings and FanDuel. Generate optimal PGA lineups with course-fit scoring, Monte Carlo simulation, and ownership-aware optimization.',
-  url: 'https://golf-dfs-optimizer.vercel.app/optimizer',
+  url: 'https://birdievantage.com/optimizer',
   featureList: [
     'Course-fit scoring',
     'Monte Carlo simulation',

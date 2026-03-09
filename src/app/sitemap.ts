@@ -2,7 +2,7 @@ import { MetadataRoute } from 'next';
 import { getAllGolfers } from '@/lib/golfer-data';
 import { getAllCourses } from '@/lib/course-data';
 
-const BASE_URL = 'https://golf-dfs-optimizer.vercel.app';
+const BASE_URL = 'https://birdievantage.com';
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();
