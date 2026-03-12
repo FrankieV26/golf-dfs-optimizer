@@ -6,6 +6,10 @@ const geistSans = Geist({ variable: '--font-geist-sans', subsets: ['latin'] });
 const geistMono = Geist_Mono({ variable: '--font-geist-mono', subsets: ['latin'] });
 
 export const metadata: Metadata = {
+  icons: {
+    icon: '/logo-icon.svg',
+    apple: '/logo-icon.svg',
+  },
   metadataBase: new URL('https://birdievantage.com'),
   title: {
     default: 'BirdieVantage - Free Golf DFS Lineup Optimizer for DraftKings & FanDuel',
