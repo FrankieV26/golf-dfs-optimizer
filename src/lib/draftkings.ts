@@ -12,6 +12,7 @@ interface DKDraftGroup {
   StartDate: string;
   StartDateEst: string;
   GameCount: number;
+  GameTypeId?: number;
   ContestStartTimeSuffix: string | null;
   ContestStartTimeType: number;
   Games: unknown[];
@@ -31,9 +32,15 @@ interface DKDraftable {
   status?: string;
 }
 
+interface DKContest {
+  dg: number;        // DraftGroupId reference
+  gameTypeId: number; // 6 = Classic, 84 = Showdown, 135 = Tiers
+}
+
 /** Fetch active golf contests from DraftKings lobby */
 export async function fetchDKContests(): Promise<{
   draftGroups: DKDraftGroup[];
+  contests: DKContest[];
   raw: Record<string, unknown>;
 }> {
   const res = await fetch(
@@ -43,6 +50,7 @@ export async function fetchDKContests(): Promise<{
   const data = await res.json();
   return {
     draftGroups: data.DraftGroups || [],
+    contests: data.Contests || [],
     raw: data,
   };
 }
@@ -84,19 +92,32 @@ export async function getDKGolfers(): Promise<{
   draftGroupId: number;
   tournament: string;
 }> {
-  const { draftGroups, raw } = await fetchDKContests();
+  const { draftGroups, contests } = await fetchDKContests();
 
-  // Find the main Classic golf draft group (most games = most golfers)
-  const golfGroups = draftGroups.filter(
-    (g) => g.GameCount > 0
-  );
-  if (golfGroups.length === 0) {
+  if (draftGroups.length === 0) {
     throw new Error('No active DraftKings golf contests found');
   }
 
-  const mainGroup = golfGroups.sort(
-    (a, b) => b.GameCount - a.GameCount
-  )[0];
+  // Find draft group IDs used by Classic contests (gameTypeId 6)
+  const classicDgIds = new Set(
+    contests.filter((c) => c.gameTypeId === 6).map((c) => c.dg)
+  );
+
+  // Prefer Classic draft group; fall back to largest by GameCount
+  let mainGroup: DKDraftGroup | undefined;
+  if (classicDgIds.size > 0) {
+    mainGroup = draftGroups
+      .filter((g) => classicDgIds.has(g.DraftGroupId) && g.GameCount > 0)
+      .sort((a, b) => b.GameCount - a.GameCount)[0];
+  }
+  if (!mainGroup) {
+    mainGroup = draftGroups
+      .filter((g) => g.GameCount > 0)
+      .sort((a, b) => b.GameCount - a.GameCount)[0];
+  }
+  if (!mainGroup) {
+    throw new Error('No active DraftKings golf contests found');
+  }
 
   const draftables = await fetchDKDraftables(mainGroup.DraftGroupId);
   const golfers = parseDKGolfers(draftables);
