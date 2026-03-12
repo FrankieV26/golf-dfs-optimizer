@@ -15,7 +15,7 @@ export default function GolfersIndexPage() {
     <div className="min-h-screen bg-white">
       <header className="border-b border-gray-100">
         <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2 text-xl font-bold text-green-700"><img src="/logo-icon.svg" alt="" className="h-8 w-auto" />BirdieVantage</Link>
+          <Link href="/"><img src="/logo.svg" alt="BirdieVantage" className="h-10 w-auto" /></Link>
           <nav className="flex gap-6 text-sm">
             <Link href="/optimizer" className="text-gray-600 hover:text-gray-800">Optimizer</Link>
             <Link href="/strategy" className="text-gray-600 hover:text-gray-800">Strategy</Link>
