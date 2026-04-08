@@ -42,19 +42,30 @@ function enrichGolfer(golfer: Golfer, dgMap: Map<string, DGEnrichedPlayer>): Gol
   };
 }
 
+/** Check if current time is within DG API hours (6am–11pm ET) */
+function isDGApiHours(): boolean {
+  const et = new Date().toLocaleString('en-US', { timeZone: 'America/New_York' });
+  const hour = new Date(et).getHours();
+  return hour >= 6 && hour < 23;
+}
+
 /** GET: Fetch DraftKings golfers + Data Golf enrichment */
 export async function GET(req: NextRequest) {
   const platform = req.nextUrl.searchParams.get('platform') || 'draftkings';
 
   try {
     if (platform === 'draftkings') {
-      // Fetch DK slate and DG data in parallel
+      // Only call Data Golf API during 6am–11pm ET
+      const dgPromise = isDGApiHours()
+        ? fetchAllDGData('draftkings').catch(err => {
+            console.warn('Data Golf fetch failed, using DK data only:', err.message);
+            return null;
+          })
+        : Promise.resolve(null);
+
       const [dkData, dgData] = await Promise.all([
         getDKGolfers(),
-        fetchAllDGData('draftkings').catch(err => {
-          console.warn('Data Golf fetch failed, using DK data only:', err.message);
-          return null;
-        }),
+        dgPromise,
       ]);
 
       let golfers = dkData.golfers;
@@ -108,11 +119,13 @@ export async function POST(req: NextRequest) {
     const text = await file.text();
     let golfers = parseFanDuelCSV(text);
 
-    // Try to enrich with Data Golf FanDuel projections
-    const dgData = await fetchAllDGData('fanduel').catch(err => {
-      console.warn('Data Golf FD fetch failed:', err.message);
-      return null;
-    });
+    // Try to enrich with Data Golf FanDuel projections (6am–11pm ET only)
+    const dgData = isDGApiHours()
+      ? await fetchAllDGData('fanduel').catch(err => {
+          console.warn('Data Golf FD fetch failed:', err.message);
+          return null;
+        })
+      : null;
 
     if (dgData) {
       const dgMap = new Map<string, DGEnrichedPlayer>();
