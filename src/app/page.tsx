@@ -271,6 +271,7 @@ export default function HomePage() {
           <span>BirdieVantage &copy; {new Date().getFullYear()}</span>
           <div className="flex gap-6">
             <Link href="/optimizer" className="hover:text-gray-700">Optimizer</Link>
+            <Link href="/live" className="hover:text-gray-700">Live</Link>
             <Link href="/strategy" className="hover:text-gray-700">Strategy</Link>
             <Link href="/scoring" className="hover:text-gray-700">Scoring</Link>
             <Link href="/golfers" className="hover:text-gray-700">Golfers</Link>

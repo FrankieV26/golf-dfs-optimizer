@@ -374,6 +374,7 @@ export default function OptimizerPage() {
           <a href="/"><img src="/logo.svg" alt="BirdieVantage" className="h-14 w-auto" /></a>
           <nav className="flex gap-6 text-sm">
             <a href="/optimizer" className="font-medium text-green-700">Optimizer</a>
+            <a href="/live" className="text-gray-600 hover:text-gray-800">Live</a>
             <a href="/strategy" className="text-gray-600 hover:text-gray-800">Strategy</a>
             <a href="/scoring" className="text-gray-600 hover:text-gray-800">Scoring</a>
             <a href="/golfers" className="text-gray-600 hover:text-gray-800">Golfers</a>

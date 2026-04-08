@@ -12,8 +12,15 @@ import { normalizeName } from './normalize-name';
 
 const BASE = 'https://feeds.datagolf.com';
 
-// Cache DG responses for 15 minutes — data only updates a few times per day
-const DG_REVALIDATE = 900;
+/**
+ * Cache DG responses for 5 min on Tue/Wed (lineup-building days),
+ * 15 min otherwise. Uses Eastern Time since PGA events are US-based.
+ */
+function getDGRevalidate(): number {
+  const et = new Date().toLocaleString('en-US', { timeZone: 'America/New_York' });
+  const day = new Date(et).getDay(); // 0=Sun, 2=Tue, 3=Wed
+  return day === 2 || day === 3 ? 300 : 900;
+}
 
 function apiKey(): string {
   const key = process.env.DATAGOLF_API_KEY;
@@ -28,7 +35,7 @@ function url(path: string, params: Record<string, string> = {}): string {
 
 /** Cached fetch wrapper — uses Next.js data cache on Vercel */
 function cachedFetch(input: string): Promise<Response> {
-  return fetch(input, { next: { revalidate: DG_REVALIDATE } });
+  return fetch(input, { next: { revalidate: getDGRevalidate() } });
 }
 
 // ── Types ────────────────────────────────────

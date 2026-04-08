@@ -15,6 +15,7 @@ export default function ScoringPage() {
           <Link href="/"><img src="/logo.svg" alt="BirdieVantage" className="h-14 w-auto" /></Link>
           <nav className="flex gap-6 text-sm">
             <Link href="/optimizer" className="text-gray-600 hover:text-gray-800">Optimizer</Link>
+            <Link href="/live" className="text-gray-600 hover:text-gray-800">Live</Link>
             <Link href="/strategy" className="text-gray-600 hover:text-gray-800">Strategy</Link>
             <Link href="/scoring" className="font-medium text-green-700">Scoring</Link>
             <Link href="/golfers" className="text-gray-600 hover:text-gray-800">Golfers</Link>
@@ -204,6 +205,7 @@ export default function ScoringPage() {
           <span>BirdieVantage &copy; {new Date().getFullYear()}</span>
           <div className="flex gap-6">
             <Link href="/optimizer" className="hover:text-gray-700">Optimizer</Link>
+            <Link href="/live" className="hover:text-gray-700">Live</Link>
             <Link href="/strategy" className="hover:text-gray-700">Strategy</Link>
             <Link href="/scoring" className="hover:text-gray-700">Scoring</Link>
             <Link href="/golfers" className="hover:text-gray-700">Golfers</Link>
