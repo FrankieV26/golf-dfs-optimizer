@@ -72,7 +72,8 @@ export function parseDKGolfers(draftables: DKDraftable[]): Golfer[] {
   return draftables
     .filter((p) => p.salary > 0 && p.status !== 'O') // exclude $0 and injured-out
     .map((p) => {
-      const fppg = p.draftStatAttributes?.[0]?.value ?? 0;
+      const raw = p.draftStatAttributes?.[0]?.value;
+      const fppg = typeof raw === 'number' ? raw : parseFloat(raw) || 0;
       return {
         id: p.draftableId,
         name: p.displayName,
