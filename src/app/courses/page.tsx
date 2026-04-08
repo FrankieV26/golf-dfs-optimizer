@@ -15,14 +15,14 @@ export default function CoursesIndexPage() {
   const courses = getAllCourses();
 
   return (
-    <div className="min-h-screen bg-white flex flex-col">
+    <div className="min-h-screen bg-white dark:bg-gray-950 flex flex-col">
       <NavBar />
 
       <main className="flex-1 max-w-6xl mx-auto px-4 py-12">
-        <h1 className="text-4xl font-extrabold tracking-tight text-gray-900 mb-4">
+        <h1 className="text-4xl font-extrabold tracking-tight text-gray-900 dark:text-gray-100 mb-4">
           PGA Tour Course DFS Breakdowns
         </h1>
-        <p className="text-lg text-gray-600 mb-10 max-w-3xl">
+        <p className="text-lg text-gray-600 dark:text-gray-400 mb-10 max-w-3xl">
           Course-by-course DFS analysis for the top venues on the PGA Tour schedule. Each
           breakdown includes course-fit weights, key statistics, historical winners, and
           actionable DFS strategy tips for DraftKings and FanDuel.
@@ -37,11 +37,11 @@ export default function CoursesIndexPage() {
               <Link
                 key={course.slug}
                 href={`/courses/${course.slug}`}
-                className="block rounded-xl border border-gray-200 p-6 hover:border-green-300 hover:shadow-sm transition-all"
+                className="block rounded-xl border border-gray-200 dark:border-gray-800 p-6 hover:border-green-300 dark:hover:border-green-600 hover:shadow-sm transition-all"
               >
-                <h2 className="text-lg font-bold text-gray-900 mb-1">{course.courseName}</h2>
-                <p className="text-sm text-green-700 font-semibold mb-3">{course.tournamentName}</p>
-                <div className="flex items-center gap-4 text-sm text-gray-500 mb-4">
+                <h2 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-1">{course.courseName}</h2>
+                <p className="text-sm text-green-700 dark:text-green-400 font-semibold mb-3">{course.tournamentName}</p>
+                <div className="flex items-center gap-4 text-sm text-gray-500 dark:text-gray-400 mb-4">
                   <span>{course.location}</span>
                   <span>&middot;</span>
                   <span>Par {course.par}</span>
@@ -63,8 +63,8 @@ export default function CoursesIndexPage() {
 
         {/* SEO Content */}
         <section className="max-w-3xl">
-          <h2 className="text-2xl font-bold mb-4">Why Course Fit Matters in Golf DFS</h2>
-          <div className="prose prose-gray max-w-none text-gray-600 space-y-4">
+          <h2 className="text-2xl font-bold mb-4 dark:text-gray-100">Why Course Fit Matters in Golf DFS</h2>
+          <div className="prose prose-gray dark:prose-invert max-w-none text-gray-600 dark:text-gray-400 space-y-4">
             <p>
               Every golf course on the PGA Tour demands a different combination of skills.
               Some courses reward bombers who can overpower the layout with driving distance,
@@ -77,7 +77,7 @@ export default function CoursesIndexPage() {
               categories — off the tee, approach, around the green, and putting — based on
               historical performance data at each venue. These weights tell you which skills
               matter most for success at each course, allowing you to match{' '}
-              <Link href="/golfers" className="text-green-700 hover:underline">
+              <Link href="/golfers" className="text-green-700 dark:text-green-400 hover:underline">
                 golfer profiles
               </Link>{' '}
               to course demands and identify value plays that the general public overlooks.
@@ -91,7 +91,7 @@ export default function CoursesIndexPage() {
             </p>
             <p>
               Browse the course profiles above for detailed breakdowns, or use the{' '}
-              <Link href="/optimizer" className="text-green-700 hover:underline">
+              <Link href="/optimizer" className="text-green-700 dark:text-green-400 hover:underline">
                 lineup optimizer
               </Link>{' '}
               to automatically apply course-fit scoring to your lineups.
@@ -100,9 +100,9 @@ export default function CoursesIndexPage() {
         </section>
 
         {/* CTA */}
-        <div className="mt-12 p-6 bg-green-50 rounded-xl text-center">
-          <h3 className="text-lg font-bold mb-2">Optimize with Course-Fit Scoring</h3>
-          <p className="text-gray-600 mb-4">
+        <div className="mt-12 p-6 bg-green-50 dark:bg-green-900/20 rounded-xl text-center">
+          <h3 className="text-lg font-bold mb-2 dark:text-gray-100">Optimize with Course-Fit Scoring</h3>
+          <p className="text-gray-600 dark:text-gray-400 mb-4">
             BirdieVantage&apos;s optimizer automatically applies course-fit weights to rank
             golfers by how well their profile matches this week&apos;s venue.
           </p>
@@ -133,7 +133,7 @@ function getTopWeight(profile: { offTheTeeWeight: number; approachWeight: number
 
 function WeightPill({ label, value, highlight }: { label: string; value: number; highlight: boolean }) {
   return (
-    <div className={`rounded-lg py-1.5 px-2 text-xs ${highlight ? 'bg-green-100 text-green-800 font-bold' : 'bg-gray-100 text-gray-600'}`}>
+    <div className={`rounded-lg py-1.5 px-2 text-xs ${highlight ? 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300 font-bold' : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400'}`}>
       <div className="font-medium">{label}</div>
       <div>{(value * 100).toFixed(0)}%</div>
     </div>

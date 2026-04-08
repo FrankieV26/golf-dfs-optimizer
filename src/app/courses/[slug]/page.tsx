@@ -71,7 +71,7 @@ export default async function CourseProfilePage({ params }: PageProps) {
   };
 
   return (
-    <div className="min-h-screen bg-white flex flex-col">
+    <div className="min-h-screen bg-white dark:bg-gray-950 flex flex-col">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(courseJsonLd) }}
@@ -81,17 +81,17 @@ export default async function CourseProfilePage({ params }: PageProps) {
       <main className="flex-1 max-w-4xl mx-auto px-4 py-12">
         {/* Hero */}
         <section className="mb-12">
-          <div className="flex items-center gap-2 text-sm text-gray-500 mb-4">
-            <Link href="/courses" className="hover:text-green-700">Course Profiles</Link>
+          <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 mb-4">
+            <Link href="/courses" className="hover:text-green-700 dark:hover:text-green-400">Course Profiles</Link>
             <span>/</span>
-            <span className="text-gray-800">{course.courseName}</span>
+            <span className="text-gray-800 dark:text-gray-200">{course.courseName}</span>
           </div>
 
-          <h1 className="text-4xl font-extrabold tracking-tight text-gray-900 mb-2">
+          <h1 className="text-4xl font-extrabold tracking-tight text-gray-900 dark:text-gray-100 mb-2">
             {course.courseName}
           </h1>
-          <p className="text-lg text-green-700 font-semibold mb-1">{course.tournamentName}</p>
-          <p className="text-gray-500 mb-8">{course.location}</p>
+          <p className="text-lg text-green-700 dark:text-green-400 font-semibold mb-1">{course.tournamentName}</p>
+          <p className="text-gray-500 dark:text-gray-400 mb-8">{course.location}</p>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <InfoCard label="Par" value={course.par.toString()} />
@@ -103,14 +103,14 @@ export default async function CourseProfilePage({ params }: PageProps) {
 
         {/* Course Description */}
         <section className="mb-12">
-          <h2 className="text-2xl font-bold mb-4">Course Overview</h2>
-          <p className="text-gray-600 leading-relaxed">{course.description}</p>
+          <h2 className="text-2xl font-bold mb-4 dark:text-gray-100">Course Overview</h2>
+          <p className="text-gray-600 dark:text-gray-400 leading-relaxed">{course.description}</p>
         </section>
 
         {/* Course Fit Profile */}
         <section className="mb-12">
-          <h2 className="text-2xl font-bold mb-4">Course Fit Profile</h2>
-          <p className="text-gray-600 mb-6">
+          <h2 className="text-2xl font-bold mb-4 dark:text-gray-100">Course Fit Profile</h2>
+          <p className="text-gray-600 dark:text-gray-400 mb-6">
             BirdieVantage&apos;s course-fit model assigns weights to each strokes gained category based on
             historical performance data at {course.courseName}. Higher weights indicate
             categories that matter more for success at this venue.
@@ -119,14 +119,14 @@ export default async function CourseProfilePage({ params }: PageProps) {
             {weights.map((w) => (
               <div key={w.abbr}>
                 <div className="flex items-center justify-between mb-1">
-                  <span className="text-sm font-medium text-gray-700">
-                    SG: {w.label} <span className="text-gray-400">({w.abbr})</span>
+                  <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                    SG: {w.label} <span className="text-gray-400 dark:text-gray-500">({w.abbr})</span>
                   </span>
-                  <span className="text-sm font-bold text-gray-900">
+                  <span className="text-sm font-bold text-gray-900 dark:text-gray-100">
                     {(w.weight * 100).toFixed(0)}%
                   </span>
                 </div>
-                <div className="h-4 bg-gray-100 rounded-full overflow-hidden">
+                <div className="h-4 bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden">
                   <div
                     className="h-full bg-green-500 rounded-full transition-all"
                     style={{ width: `${w.weight * 100 * 2.2}%` }}
@@ -139,12 +139,12 @@ export default async function CourseProfilePage({ params }: PageProps) {
 
         {/* Key Stats */}
         <section className="mb-12">
-          <h2 className="text-2xl font-bold mb-4">Key Stats That Matter Here</h2>
+          <h2 className="text-2xl font-bold mb-4 dark:text-gray-100">Key Stats That Matter Here</h2>
           <div className="space-y-3">
             {course.keyStats.map((stat, i) => (
               <div key={i} className="flex gap-3 items-start">
                 <span className="mt-0.5 flex-shrink-0 w-2 h-2 rounded-full bg-green-500" />
-                <p className="text-gray-600">{stat}</p>
+                <p className="text-gray-600 dark:text-gray-400">{stat}</p>
               </div>
             ))}
           </div>
@@ -152,21 +152,21 @@ export default async function CourseProfilePage({ params }: PageProps) {
 
         {/* Key Holes */}
         <section className="mb-12">
-          <h2 className="text-2xl font-bold mb-4">Key Holes</h2>
+          <h2 className="text-2xl font-bold mb-4 dark:text-gray-100">Key Holes</h2>
           <div className="space-y-4">
             {course.keyHoles.map((hole) => (
-              <div key={hole.hole} className="rounded-xl border border-gray-200 p-4">
+              <div key={hole.hole} className="rounded-xl border border-gray-200 dark:border-gray-800 p-4">
                 <div className="flex items-center gap-3 mb-2">
-                  <span className="flex-shrink-0 w-8 h-8 rounded-full bg-green-100 text-green-700 font-bold text-sm flex items-center justify-center">
+                  <span className="flex-shrink-0 w-8 h-8 rounded-full bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 font-bold text-sm flex items-center justify-center">
                     {hole.hole}
                   </span>
                   <div>
-                    <span className="font-bold text-gray-900">Par {hole.par}</span>
+                    <span className="font-bold text-gray-900 dark:text-gray-100">Par {hole.par}</span>
                     <span className="text-gray-400 mx-2">&middot;</span>
-                    <span className="text-gray-600">{hole.yards} yards</span>
+                    <span className="text-gray-600 dark:text-gray-400">{hole.yards} yards</span>
                   </div>
                 </div>
-                <p className="text-gray-600 text-sm">{hole.description}</p>
+                <p className="text-gray-600 dark:text-gray-400 text-sm">{hole.description}</p>
               </div>
             ))}
           </div>
@@ -174,19 +174,19 @@ export default async function CourseProfilePage({ params }: PageProps) {
 
         {/* Historical Winners */}
         <section className="mb-12">
-          <h2 className="text-2xl font-bold mb-4">Historical Winners</h2>
-          <div className="overflow-x-auto rounded-xl border border-gray-200 shadow-sm">
-            <table className="min-w-full divide-y divide-gray-200 text-sm">
-              <thead className="bg-gray-50">
+          <h2 className="text-2xl font-bold mb-4 dark:text-gray-100">Historical Winners</h2>
+          <div className="overflow-x-auto rounded-xl border border-gray-200 dark:border-gray-800 shadow-sm">
+            <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-800 text-sm">
+              <thead className="bg-gray-50 dark:bg-gray-900">
                 <tr>
-                  <th className="px-4 py-3 text-left font-medium text-gray-500 sticky top-0 bg-gray-50/95 backdrop-blur-sm z-10">Year</th>
-                  <th className="px-4 py-3 text-left font-medium text-gray-500 sticky top-0 bg-gray-50/95 backdrop-blur-sm z-10">Winner</th>
-                  <th className="px-4 py-3 text-center font-medium text-gray-500 sticky top-0 bg-gray-50/95 backdrop-blur-sm z-10">Score</th>
+                  <th className="px-4 py-3 text-left font-medium text-gray-500 dark:text-gray-400 sticky top-0 bg-gray-50/95 dark:bg-gray-900/95 backdrop-blur-sm z-10">Year</th>
+                  <th className="px-4 py-3 text-left font-medium text-gray-500 dark:text-gray-400 sticky top-0 bg-gray-50/95 dark:bg-gray-900/95 backdrop-blur-sm z-10">Winner</th>
+                  <th className="px-4 py-3 text-center font-medium text-gray-500 dark:text-gray-400 sticky top-0 bg-gray-50/95 dark:bg-gray-900/95 backdrop-blur-sm z-10">Score</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-100">
+              <tbody className="divide-y divide-gray-100 dark:divide-gray-800">
                 {course.historicalWinners.map((w, i) => (
-                  <tr key={i} className="hover:bg-gray-50">
+                  <tr key={i} className="hover:bg-gray-50 dark:hover:bg-gray-800">
                     <td className="px-4 py-2 font-medium">{w.year}</td>
                     <td className="px-4 py-2">{w.winner}</td>
                     <td className="px-4 py-2 text-center font-mono">{w.score}</td>
@@ -199,16 +199,16 @@ export default async function CourseProfilePage({ params }: PageProps) {
 
         {/* DFS Strategy */}
         <section className="mb-12">
-          <h2 className="text-2xl font-bold mb-4">
+          <h2 className="text-2xl font-bold mb-4 dark:text-gray-100">
             DFS Strategy for the {course.tournamentName}
           </h2>
           <div className="space-y-3">
             {course.dfsTips.map((tip, i) => (
               <div key={i} className="flex gap-3 items-start">
-                <span className="mt-1 flex-shrink-0 w-6 h-6 rounded-full bg-green-100 text-green-700 text-xs font-bold flex items-center justify-center">
+                <span className="mt-1 flex-shrink-0 w-6 h-6 rounded-full bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 text-xs font-bold flex items-center justify-center">
                   {i + 1}
                 </span>
-                <p className="text-gray-600">{tip}</p>
+                <p className="text-gray-600 dark:text-gray-400">{tip}</p>
               </div>
             ))}
           </div>
@@ -216,8 +216,8 @@ export default async function CourseProfilePage({ params }: PageProps) {
 
         {/* Top Golfer Fits */}
         <section className="mb-12">
-          <h2 className="text-2xl font-bold mb-4">Top Golfer Fits for {course.courseName}</h2>
-          <p className="text-gray-600 mb-4">
+          <h2 className="text-2xl font-bold mb-4 dark:text-gray-100">Top Golfer Fits for {course.courseName}</h2>
+          <p className="text-gray-600 dark:text-gray-400 mb-4">
             Golfers whose strokes gained profiles align best with the demands of this course,
             based on BirdieVantage&apos;s course-fit model.
           </p>
@@ -226,14 +226,14 @@ export default async function CourseProfilePage({ params }: PageProps) {
               <Link
                 key={g.slug}
                 href={`/golfers/${g.slug}`}
-                className="flex items-center gap-4 rounded-xl border border-gray-200 p-4 hover:border-green-300 transition-colors"
+                className="flex items-center gap-4 rounded-xl border border-gray-200 dark:border-gray-800 p-4 hover:border-green-300 dark:hover:border-green-600 transition-colors"
               >
-                <div className="flex-shrink-0 w-10 h-10 rounded-full bg-green-100 text-green-700 font-bold text-sm flex items-center justify-center">
+                <div className="flex-shrink-0 w-10 h-10 rounded-full bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 font-bold text-sm flex items-center justify-center">
                   #{g.worldRanking}
                 </div>
                 <div>
-                  <h3 className="font-bold text-gray-900">{g.name}</h3>
-                  <p className="text-sm text-gray-500">
+                  <h3 className="font-bold text-gray-900 dark:text-gray-100">{g.name}</h3>
+                  <p className="text-sm text-gray-500 dark:text-gray-400">
                     SG Total: {g.strokesGained.total >= 0 ? '+' : ''}{g.strokesGained.total.toFixed(2)}
                     <span className="mx-1">&middot;</span>
                     Cut Rate: {g.cutRate}%
@@ -245,11 +245,11 @@ export default async function CourseProfilePage({ params }: PageProps) {
         </section>
 
         {/* CTA */}
-        <section className="p-6 bg-green-50 rounded-xl text-center">
-          <h3 className="text-lg font-bold mb-2">
+        <section className="p-6 bg-green-50 dark:bg-green-900/20 rounded-xl text-center">
+          <h3 className="text-lg font-bold mb-2 dark:text-gray-100">
             Build Your {course.tournamentName} Lineup
           </h3>
-          <p className="text-gray-600 mb-4">
+          <p className="text-gray-600 dark:text-gray-400 mb-4">
             Use BirdieVantage&apos;s optimizer with built-in course-fit scoring for{' '}
             {course.courseName} to generate optimal DraftKings and FanDuel lineups.
           </p>
@@ -262,8 +262,8 @@ export default async function CourseProfilePage({ params }: PageProps) {
         </section>
 
         {/* Internal Links */}
-        <section className="mt-12 pt-8 border-t border-gray-200">
-          <h3 className="text-lg font-bold mb-4">Explore More Courses</h3>
+        <section className="mt-12 pt-8 border-t border-gray-200 dark:border-gray-800">
+          <h3 className="text-lg font-bold mb-4 dark:text-gray-100">Explore More Courses</h3>
           <div className="flex flex-wrap gap-2">
             {getAllCourses()
               .filter((c) => c.slug !== slug)
@@ -271,7 +271,7 @@ export default async function CourseProfilePage({ params }: PageProps) {
                 <Link
                   key={c.slug}
                   href={`/courses/${c.slug}`}
-                  className="px-3 py-1.5 text-sm rounded-lg border border-gray-200 text-gray-600 hover:border-green-300 hover:text-green-700 transition-colors"
+                  className="px-3 py-1.5 text-sm rounded-lg border border-gray-200 dark:border-gray-800 text-gray-600 dark:text-gray-400 hover:border-green-300 dark:hover:border-green-600 hover:text-green-700 dark:hover:text-green-400 transition-colors"
                 >
                   {c.courseName}
                 </Link>
@@ -289,9 +289,9 @@ export default async function CourseProfilePage({ params }: PageProps) {
 
 function InfoCard({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-xl border border-gray-200 p-4 text-center shadow-sm">
-      <p className="text-2xl font-bold text-gray-900 capitalize">{value}</p>
-      <p className="text-xs text-gray-500 mt-1">{label}</p>
+    <div className="rounded-xl border border-gray-200 dark:border-gray-800 p-4 text-center shadow-sm">
+      <p className="text-2xl font-bold text-gray-900 dark:text-gray-100 capitalize">{value}</p>
+      <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">{label}</p>
     </div>
   );
 }

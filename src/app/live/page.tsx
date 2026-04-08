@@ -178,12 +178,12 @@ export default function LivePage() {
 
         {/* Countdown */}
         {showCountdown && nextTournament && (
-          <div className="bg-white rounded-xl border border-gray-200 p-12 text-center shadow-sm">
-            <p className="text-lg text-gray-700 mb-2">
+          <div className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-12 text-center shadow-sm">
+            <p className="text-lg text-gray-700 dark:text-gray-300 mb-2">
               Next Up: <span className="font-semibold">{nextTournament.name}</span>
             </p>
             {nextTournament.location && (
-              <p className="text-sm text-gray-500 mb-1">{nextTournament.location}</p>
+              <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">{nextTournament.location}</p>
             )}
             {nextTournament.courseSlug ? (
               <a
@@ -193,9 +193,9 @@ export default function LivePage() {
                 {nextTournament.courseName} →
               </a>
             ) : nextTournament.courseName ? (
-              <p className="text-sm text-gray-500">{nextTournament.courseName}</p>
+              <p className="text-sm text-gray-500 dark:text-gray-400">{nextTournament.courseName}</p>
             ) : null}
-            <p className="text-sm text-gray-500 mt-3 mb-6">
+            <p className="text-sm text-gray-500 dark:text-gray-400 mt-3 mb-6">
               {new Date(nextTournament.startTime).toLocaleDateString('en-US', {
                 weekday: 'long',
                 month: 'long',
@@ -214,8 +214,8 @@ export default function LivePage() {
 
         {/* No tournament */}
         {!loading && !hasLeaderboard && !showCountdown && (
-          <div className="bg-white rounded-xl border border-gray-200 p-12 text-center shadow-sm">
-            <div className="text-gray-300 mb-4 flex justify-center">
+          <div className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-12 text-center shadow-sm">
+            <div className="text-gray-300 dark:text-gray-600 mb-4 flex justify-center">
               <svg className="w-16 h-16" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>

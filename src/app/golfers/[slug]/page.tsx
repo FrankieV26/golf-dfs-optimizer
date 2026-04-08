@@ -55,7 +55,7 @@ export default async function GolferProfilePage({ params }: PageProps) {
   };
 
   return (
-    <div className="min-h-screen bg-white flex flex-col">
+    <div className="min-h-screen bg-white dark:bg-gray-950 flex flex-col">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
@@ -65,16 +65,16 @@ export default async function GolferProfilePage({ params }: PageProps) {
       <main className="flex-1 max-w-4xl mx-auto px-4 py-12">
         {/* Hero */}
         <section className="mb-12">
-          <div className="flex items-center gap-2 text-sm text-gray-500 mb-4">
-            <Link href="/golfers" className="hover:text-green-700">Golfer Profiles</Link>
+          <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 mb-4">
+            <Link href="/golfers" className="hover:text-green-700 dark:hover:text-green-400">Golfer Profiles</Link>
             <span>/</span>
-            <span className="text-gray-800">{golfer.name}</span>
+            <span className="text-gray-800 dark:text-gray-200">{golfer.name}</span>
           </div>
 
-          <h1 className="text-4xl font-extrabold tracking-tight text-gray-900 mb-2">
+          <h1 className="text-4xl font-extrabold tracking-tight text-gray-900 dark:text-gray-100 mb-2">
             {golfer.name}
           </h1>
-          <p className="text-lg text-gray-500 mb-8">
+          <p className="text-lg text-gray-500 dark:text-gray-400 mb-8">
             {golfer.country} &middot; Age {golfer.age}
           </p>
 
@@ -89,13 +89,13 @@ export default async function GolferProfilePage({ params }: PageProps) {
         {/* Bio */}
         <section className="mb-12">
           <h2 className="text-2xl font-bold mb-4">Player Overview</h2>
-          <p className="text-gray-600 leading-relaxed">{golfer.bio}</p>
+          <p className="text-gray-600 dark:text-gray-400 leading-relaxed">{golfer.bio}</p>
         </section>
 
         {/* Strokes Gained Profile */}
         <section className="mb-12">
           <h2 className="text-2xl font-bold mb-4">Strokes Gained Profile</h2>
-          <p className="text-gray-600 mb-6">
+          <p className="text-gray-600 dark:text-gray-400 mb-6">
             {golfer.name}&apos;s strokes gained breakdown shows where they gain or lose strokes
             relative to the PGA Tour field average. Positive values indicate above-average
             performance in that category.
@@ -105,10 +105,10 @@ export default async function GolferProfilePage({ params }: PageProps) {
             <SGBar label="Approach" value={golfer.strokesGained.approach} abbr="APP" />
             <SGBar label="Around the Green" value={golfer.strokesGained.aroundTheGreen} abbr="ATG" />
             <SGBar label="Putting" value={golfer.strokesGained.putting} abbr="P" />
-            <div className="pt-2 border-t border-gray-200">
+            <div className="pt-2 border-t border-gray-200 dark:border-gray-800">
               <div className="flex items-center justify-between">
-                <span className="text-sm font-bold text-gray-900">SG: Total</span>
-                <span className={`text-sm font-bold ${golfer.strokesGained.total >= 0 ? 'text-green-700' : 'text-red-600'}`}>
+                <span className="text-sm font-bold text-gray-900 dark:text-gray-100">SG: Total</span>
+                <span className={`text-sm font-bold ${golfer.strokesGained.total >= 0 ? 'text-green-700 dark:text-green-400' : 'text-red-600'}`}>
                   {golfer.strokesGained.total >= 0 ? '+' : ''}{golfer.strokesGained.total.toFixed(2)}
                 </span>
               </div>
@@ -119,17 +119,17 @@ export default async function GolferProfilePage({ params }: PageProps) {
         {/* Recent Results */}
         <section className="mb-12">
           <h2 className="text-2xl font-bold mb-4">Recent Tournament Results</h2>
-          <div className="overflow-x-auto rounded-xl border border-gray-200 shadow-sm">
-            <table className="min-w-full divide-y divide-gray-200 text-sm">
-              <thead className="bg-gray-50">
+          <div className="overflow-x-auto rounded-xl border border-gray-200 dark:border-gray-800 shadow-sm">
+            <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-800 text-sm">
+              <thead className="bg-gray-50 dark:bg-gray-900">
                 <tr>
-                  <th className="px-4 py-3 text-left font-medium text-gray-500 sticky top-0 bg-gray-50/95 backdrop-blur-sm z-10">Tournament</th>
-                  <th className="px-4 py-3 text-center font-medium text-gray-500 sticky top-0 bg-gray-50/95 backdrop-blur-sm z-10">Finish</th>
+                  <th className="px-4 py-3 text-left font-medium text-gray-500 dark:text-gray-400 sticky top-0 bg-gray-50/95 dark:bg-gray-900/95 backdrop-blur-sm z-10">Tournament</th>
+                  <th className="px-4 py-3 text-center font-medium text-gray-500 dark:text-gray-400 sticky top-0 bg-gray-50/95 dark:bg-gray-900/95 backdrop-blur-sm z-10">Finish</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-100">
+              <tbody className="divide-y divide-gray-100 dark:divide-gray-800">
                 {golfer.recentResults.map((r, i) => (
-                  <tr key={i} className="hover:bg-gray-50">
+                  <tr key={i} className="hover:bg-gray-50 dark:hover:bg-gray-800">
                     <td className="px-4 py-2">{r.tournament}</td>
                     <td className="px-4 py-2 text-center font-medium">{r.finish}</td>
                   </tr>
@@ -142,7 +142,7 @@ export default async function GolferProfilePage({ params }: PageProps) {
         {/* Best Course Fits */}
         <section className="mb-12">
           <h2 className="text-2xl font-bold mb-4">Best Course Fits</h2>
-          <p className="text-gray-600 mb-4">
+          <p className="text-gray-600 dark:text-gray-400 mb-4">
             Courses where {golfer.name}&apos;s strokes gained profile aligns best with the
             demands of the venue, based on BirdieVantage&apos;s course-fit model.
           </p>
@@ -151,10 +151,10 @@ export default async function GolferProfilePage({ params }: PageProps) {
               <Link
                 key={c.slug}
                 href={`/courses/${c.slug}`}
-                className="block rounded-xl border border-green-200 bg-green-50 p-4 hover:border-green-300 transition-colors"
+                className="block rounded-xl border border-green-200 dark:border-green-800 bg-green-50 dark:bg-green-900/20 p-4 hover:border-green-300 dark:hover:border-green-600 transition-colors"
               >
-                <h3 className="font-bold text-green-800 mb-1">{c.profile.name}</h3>
-                <p className="text-sm text-gray-600">{c.data.tournamentName}</p>
+                <h3 className="font-bold text-green-800 dark:text-green-300 mb-1">{c.profile.name}</h3>
+                <p className="text-sm text-gray-600 dark:text-gray-400">{c.data.tournamentName}</p>
               </Link>
             ))}
           </div>
@@ -163,7 +163,7 @@ export default async function GolferProfilePage({ params }: PageProps) {
         {/* Worst Course Fits */}
         <section className="mb-12">
           <h2 className="text-2xl font-bold mb-4">Worst Course Fits</h2>
-          <p className="text-gray-600 mb-4">
+          <p className="text-gray-600 dark:text-gray-400 mb-4">
             Courses where {golfer.name}&apos;s skill profile is a poor match, suggesting
             they may underperform relative to salary in DFS.
           </p>
@@ -172,10 +172,10 @@ export default async function GolferProfilePage({ params }: PageProps) {
               <Link
                 key={c.slug}
                 href={`/courses/${c.slug}`}
-                className="block rounded-xl border border-red-200 bg-red-50 p-4 hover:border-red-300 transition-colors"
+                className="block rounded-xl border border-red-200 dark:border-red-800 bg-red-50 dark:bg-red-900/20 p-4 hover:border-red-300 transition-colors"
               >
                 <h3 className="font-bold text-red-800 mb-1">{c.profile.name}</h3>
-                <p className="text-sm text-gray-600">{c.data.tournamentName}</p>
+                <p className="text-sm text-gray-600 dark:text-gray-400">{c.data.tournamentName}</p>
               </Link>
             ))}
           </div>
@@ -187,21 +187,21 @@ export default async function GolferProfilePage({ params }: PageProps) {
           <div className="space-y-3">
             {golfer.dfsStrategyTips.map((tip, i) => (
               <div key={i} className="flex gap-3 items-start">
-                <span className="mt-1 flex-shrink-0 w-6 h-6 rounded-full bg-green-100 text-green-700 text-xs font-bold flex items-center justify-center">
+                <span className="mt-1 flex-shrink-0 w-6 h-6 rounded-full bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 text-xs font-bold flex items-center justify-center">
                   {i + 1}
                 </span>
-                <p className="text-gray-600">{tip}</p>
+                <p className="text-gray-600 dark:text-gray-400">{tip}</p>
               </div>
             ))}
           </div>
         </section>
 
         {/* CTA */}
-        <section className="p-6 bg-green-50 rounded-xl text-center">
+        <section className="p-6 bg-green-50 dark:bg-green-900/20 rounded-xl text-center">
           <h3 className="text-lg font-bold mb-2">
             Use {golfer.name} in Your DFS Lineup
           </h3>
-          <p className="text-gray-600 mb-4">
+          <p className="text-gray-600 dark:text-gray-400 mb-4">
             Build optimized DraftKings and FanDuel golf lineups featuring {golfer.name} with
             BirdieVantage&apos;s free optimizer.
           </p>
@@ -214,14 +214,14 @@ export default async function GolferProfilePage({ params }: PageProps) {
         </section>
 
         {/* Internal Links */}
-        <section className="mt-12 pt-8 border-t border-gray-200">
+        <section className="mt-12 pt-8 border-t border-gray-200 dark:border-gray-800">
           <h3 className="text-lg font-bold mb-4">Explore More Golfer Profiles</h3>
           <div className="flex flex-wrap gap-2">
             {getRelatedGolfers(golfer).map((g) => (
               <Link
                 key={g.slug}
                 href={`/golfers/${g.slug}`}
-                className="px-3 py-1.5 text-sm rounded-lg border border-gray-200 text-gray-600 hover:border-green-300 hover:text-green-700 transition-colors"
+                className="px-3 py-1.5 text-sm rounded-lg border border-gray-200 dark:border-gray-800 text-gray-600 dark:text-gray-400 hover:border-green-300 dark:hover:border-green-600 hover:text-green-700 dark:hover:text-green-400 transition-colors"
               >
                 {g.name}
               </Link>
@@ -246,9 +246,9 @@ function getRelatedGolfers(current: GolferProfile): GolferProfile[] {
 
 function StatCard({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-xl border border-gray-200 p-4 text-center shadow-sm">
-      <p className="text-2xl font-bold text-gray-900">{value}</p>
-      <p className="text-xs text-gray-500 mt-1">{label}</p>
+    <div className="rounded-xl border border-gray-200 dark:border-gray-800 p-4 text-center shadow-sm">
+      <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">{value}</p>
+      <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">{label}</p>
     </div>
   );
 }
@@ -260,14 +260,14 @@ function SGBar({ label, value, abbr }: { label: string; value: number; abbr: str
   return (
     <div>
       <div className="flex items-center justify-between mb-1">
-        <span className="text-sm font-medium text-gray-700">
+        <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
           SG: {label} <span className="text-gray-400">({abbr})</span>
         </span>
-        <span className={`text-sm font-bold ${isPositive ? 'text-green-700' : 'text-red-600'}`}>
+        <span className={`text-sm font-bold ${isPositive ? 'text-green-700 dark:text-green-400' : 'text-red-600'}`}>
           {isPositive ? '+' : ''}{value.toFixed(2)}
         </span>
       </div>
-      <div className="h-3 bg-gray-100 rounded-full overflow-hidden">
+      <div className="h-3 bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden">
         {isPositive ? (
           <div
             className="h-full bg-green-500 rounded-full transition-all"

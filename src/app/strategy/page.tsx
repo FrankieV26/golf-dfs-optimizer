@@ -142,12 +142,12 @@ export default function StrategyPage() {
               mix of skills: some reward bombers off the tee, others favor precision iron
               players, and some are won and lost on the greens.
             </p>
-            <p><strong>Key strokes-gained categories to evaluate:</strong></p>
+            <p><strong>Key Strokes Gained categories to evaluate:</strong></p>
             <ul className="space-y-2">
-              <li><strong>SG: Off the Tee</strong> -- Driving distance and accuracy. Crucial at long, narrow courses like <Link href="/courses/torrey-pines-south" className="text-green-700 dark:text-green-400 underline hover:text-green-800 dark:hover:text-green-300">Torrey Pines South</Link>.</li>
-              <li><strong>SG: Approach</strong> -- Iron play and proximity to the hole. The most consistently predictive stat across all courses.</li>
-              <li><strong>SG: Around the Green</strong> -- Short game and chipping. Matters most at courses with difficult greenside areas like <Link href="/courses/pinehurst-no2" className="text-green-700 dark:text-green-400 underline hover:text-green-800 dark:hover:text-green-300">Pinehurst No. 2</Link>.</li>
-              <li><strong>SG: Putting</strong> -- Surface-dependent (bentgrass vs bermuda vs poa). Check the grass type before weighting this.</li>
+              <li><strong>Strokes Gained: Off the Tee</strong> -- Driving distance and accuracy. Crucial at long, narrow courses like <Link href="/courses/torrey-pines-south" className="text-green-700 dark:text-green-400 underline hover:text-green-800 dark:hover:text-green-300">Torrey Pines South</Link>.</li>
+              <li><strong>Strokes Gained: Approach</strong> -- Iron play and proximity to the hole. The most consistently predictive stat across all courses.</li>
+              <li><strong>Strokes Gained: Around the Green</strong> -- Short game and chipping. Matters most at courses with difficult greenside areas like <Link href="/courses/pinehurst-no2" className="text-green-700 dark:text-green-400 underline hover:text-green-800 dark:hover:text-green-300">Pinehurst No. 2</Link>.</li>
+              <li><strong>Strokes Gained: Putting</strong> -- Surface-dependent (bentgrass vs bermuda vs poa). Check the grass type before weighting this.</li>
             </ul>
             <Callout>
               BirdieVantage&apos;s course-fit model automatically weights these categories based

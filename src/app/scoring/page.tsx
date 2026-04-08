@@ -11,12 +11,12 @@ export const metadata: Metadata = {
 
 export default function ScoringPage() {
   return (
-    <div className="min-h-screen bg-white flex flex-col">
+    <div className="min-h-screen bg-white dark:bg-gray-950 flex flex-col">
       <NavBar />
 
       <main className="flex-1 max-w-4xl mx-auto px-4 py-12">
         <h1 className="text-4xl font-extrabold mb-4">Golf DFS Scoring Rules</h1>
-        <p className="text-lg text-gray-600 mb-10">
+        <p className="text-lg text-gray-600 dark:text-gray-400 mb-10">
           Complete comparison of DraftKings and FanDuel golf fantasy scoring for the 2025-2026 PGA Tour season.
         </p>
 
@@ -41,17 +41,17 @@ export default function ScoringPage() {
 
         {/* Per-Hole Scoring */}
         <h2 className="text-2xl font-bold mb-4">Per-Hole Scoring</h2>
-        <div className="overflow-x-auto rounded-xl border border-gray-200 shadow-sm mb-12">
-          <table className="min-w-full divide-y divide-gray-200 text-sm">
-            <thead className="bg-gray-50">
+        <div className="overflow-x-auto rounded-xl border border-gray-200 dark:border-gray-800 shadow-sm mb-12">
+          <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-800 text-sm">
+            <thead className="bg-gray-50 dark:bg-gray-900">
               <tr>
-                <th className="px-4 py-3 text-left font-medium text-gray-500 sticky top-0 bg-gray-50/95 backdrop-blur-sm z-10">Result</th>
-                <th className="px-4 py-3 text-center font-medium text-green-700 sticky top-0 bg-gray-50/95 backdrop-blur-sm z-10">DraftKings</th>
-                <th className="px-4 py-3 text-center font-medium text-blue-700 sticky top-0 bg-gray-50/95 backdrop-blur-sm z-10">FanDuel</th>
-                <th className="px-4 py-3 text-left font-medium text-gray-500 sticky top-0 bg-gray-50/95 backdrop-blur-sm z-10">Strategy Note</th>
+                <th className="px-4 py-3 text-left font-medium text-gray-500 dark:text-gray-400 sticky top-0 bg-gray-50/95 dark:bg-gray-900/95 backdrop-blur-sm z-10">Result</th>
+                <th className="px-4 py-3 text-center font-medium text-green-700 dark:text-green-400 sticky top-0 bg-gray-50/95 dark:bg-gray-900/95 backdrop-blur-sm z-10">DraftKings</th>
+                <th className="px-4 py-3 text-center font-medium text-blue-700 dark:text-blue-400 sticky top-0 bg-gray-50/95 dark:bg-gray-900/95 backdrop-blur-sm z-10">FanDuel</th>
+                <th className="px-4 py-3 text-left font-medium text-gray-500 dark:text-gray-400 sticky top-0 bg-gray-50/95 dark:bg-gray-900/95 backdrop-blur-sm z-10">Strategy Note</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-100">
+            <tbody className="divide-y divide-gray-100 dark:divide-gray-800">
               <ScoringRow result="Double Eagle (Albatross)" dk="+20" fd="+7" note="Extremely rare" />
               <ScoringRow result="Eagle" dk="+8" fd="+7" note="DK rewards eagles slightly more" />
               <ScoringRow result="Birdie" dk="+3" fd="+3.1" note="FD has a slight edge per birdie" />
@@ -86,16 +86,16 @@ export default function ScoringPage() {
 
         {/* Finish Position Bonuses */}
         <h2 className="text-2xl font-bold mb-4">Finish Position Bonuses</h2>
-        <div className="overflow-x-auto rounded-xl border border-gray-200 shadow-sm mb-12">
-          <table className="min-w-full divide-y divide-gray-200 text-sm">
-            <thead className="bg-gray-50">
+        <div className="overflow-x-auto rounded-xl border border-gray-200 dark:border-gray-800 shadow-sm mb-12">
+          <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-800 text-sm">
+            <thead className="bg-gray-50 dark:bg-gray-900">
               <tr>
-                <th className="px-4 py-3 text-left font-medium text-gray-500 sticky top-0 bg-gray-50/95 backdrop-blur-sm z-10">Finish</th>
-                <th className="px-4 py-3 text-center font-medium text-green-700 sticky top-0 bg-gray-50/95 backdrop-blur-sm z-10">DraftKings</th>
-                <th className="px-4 py-3 text-center font-medium text-blue-700 sticky top-0 bg-gray-50/95 backdrop-blur-sm z-10">FanDuel</th>
+                <th className="px-4 py-3 text-left font-medium text-gray-500 dark:text-gray-400 sticky top-0 bg-gray-50/95 dark:bg-gray-900/95 backdrop-blur-sm z-10">Finish</th>
+                <th className="px-4 py-3 text-center font-medium text-green-700 dark:text-green-400 sticky top-0 bg-gray-50/95 dark:bg-gray-900/95 backdrop-blur-sm z-10">DraftKings</th>
+                <th className="px-4 py-3 text-center font-medium text-blue-700 dark:text-blue-400 sticky top-0 bg-gray-50/95 dark:bg-gray-900/95 backdrop-blur-sm z-10">FanDuel</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-100">
+            <tbody className="divide-y divide-gray-100 dark:divide-gray-800">
               <FinishRow finish="1st" dk="+30" fd="+20" />
               <FinishRow finish="2nd" dk="+20" fd="+12" />
               <FinishRow finish="3rd" dk="+18" fd="+12" />
@@ -115,7 +115,7 @@ export default function ScoringPage() {
 
         {/* Strategy Implications */}
         <h2 className="text-2xl font-bold mb-4">Strategy Implications</h2>
-        <div className="prose prose-gray max-w-none space-y-4 mb-12">
+        <div className="prose prose-gray dark:prose-invert max-w-none space-y-4 mb-12">
           <p>
             The scoring differences between platforms create real strategic divergence:
           </p>
@@ -140,11 +140,11 @@ export default function ScoringPage() {
           </ul>
         </div>
 
-        <div className="p-6 bg-green-50 rounded-xl text-center">
+        <div className="p-6 bg-green-50 dark:bg-green-900/20 rounded-xl text-center">
           <h3 className="text-lg font-bold mb-2">
             Optimize for the Right Platform
           </h3>
-          <p className="text-gray-600 mb-4">
+          <p className="text-gray-600 dark:text-gray-400 mb-4">
             BirdieVantage automatically applies the correct scoring rules for DraftKings or FanDuel.
           </p>
           <Link
@@ -155,36 +155,36 @@ export default function ScoringPage() {
           </Link>
         </div>
 
-        <div className="mt-12 pt-8 border-t border-gray-200">
+        <div className="mt-12 pt-8 border-t border-gray-200 dark:border-gray-800">
           <h3 className="text-xl font-bold mb-4">Related Resources</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <Link
               href="/strategy"
-              className="block rounded-xl border border-gray-200 p-4 hover:border-green-300 transition-colors"
+              className="block rounded-xl border border-gray-200 dark:border-gray-800 p-4 hover:border-green-300 transition-colors"
             >
-              <h4 className="font-bold text-gray-900 mb-1">Golf DFS Strategy Guide</h4>
-              <p className="text-sm text-gray-600">Course fit, ownership leverage, bankroll management, and more.</p>
+              <h4 className="font-bold text-gray-900 dark:text-gray-100 mb-1">Golf DFS Strategy Guide</h4>
+              <p className="text-sm text-gray-600 dark:text-gray-400">Course fit, ownership leverage, bankroll management, and more.</p>
             </Link>
             <Link
               href="/golfers/scottie-scheffler"
-              className="block rounded-xl border border-gray-200 p-4 hover:border-green-300 transition-colors"
+              className="block rounded-xl border border-gray-200 dark:border-gray-800 p-4 hover:border-green-300 transition-colors"
             >
-              <h4 className="font-bold text-gray-900 mb-1">Scottie Scheffler Profile</h4>
-              <p className="text-sm text-gray-600">World #1 — the prototypical high-ceiling DK play with elite birdie upside.</p>
+              <h4 className="font-bold text-gray-900 dark:text-gray-100 mb-1">Scottie Scheffler Profile</h4>
+              <p className="text-sm text-gray-600 dark:text-gray-400">World #1 — the prototypical high-ceiling DK play with elite birdie upside.</p>
             </Link>
             <Link
               href="/golfers/collin-morikawa"
-              className="block rounded-xl border border-gray-200 p-4 hover:border-green-300 transition-colors"
+              className="block rounded-xl border border-gray-200 dark:border-gray-800 p-4 hover:border-green-300 transition-colors"
             >
-              <h4 className="font-bold text-gray-900 mb-1">Collin Morikawa Profile</h4>
-              <p className="text-sm text-gray-600">Elite iron player and low-bogey rate — a FanDuel specialist.</p>
+              <h4 className="font-bold text-gray-900 dark:text-gray-100 mb-1">Collin Morikawa Profile</h4>
+              <p className="text-sm text-gray-600 dark:text-gray-400">Elite iron player and low-bogey rate — a FanDuel specialist.</p>
             </Link>
             <Link
               href="/courses/augusta-national"
-              className="block rounded-xl border border-gray-200 p-4 hover:border-green-300 transition-colors"
+              className="block rounded-xl border border-gray-200 dark:border-gray-800 p-4 hover:border-green-300 transition-colors"
             >
-              <h4 className="font-bold text-gray-900 mb-1">Augusta National Breakdown</h4>
-              <p className="text-sm text-gray-600">Where eagles and birdie streaks swing DraftKings scoring the most.</p>
+              <h4 className="font-bold text-gray-900 dark:text-gray-100 mb-1">Augusta National Breakdown</h4>
+              <p className="text-sm text-gray-600 dark:text-gray-400">Where eagles and birdie streaks swing DraftKings scoring the most.</p>
             </Link>
           </div>
         </div>
@@ -204,9 +204,9 @@ function Card({
   accent: 'green' | 'blue';
   children: React.ReactNode;
 }) {
-  const border = accent === 'green' ? 'border-green-200' : 'border-blue-200';
-  const bg = accent === 'green' ? 'bg-green-50' : 'bg-blue-50';
-  const text = accent === 'green' ? 'text-green-700' : 'text-blue-700';
+  const border = accent === 'green' ? 'border-green-200 dark:border-green-800' : 'border-blue-200 dark:border-blue-800';
+  const bg = accent === 'green' ? 'bg-green-50 dark:bg-green-900/20' : 'bg-blue-50 dark:bg-blue-900/20';
+  const text = accent === 'green' ? 'text-green-700 dark:text-green-400' : 'text-blue-700 dark:text-blue-400';
   return (
     <div className={`rounded-xl border ${border} ${bg} p-5`}>
       <h3 className={`font-bold mb-3 ${text}`}>{title}</h3>
@@ -227,18 +227,18 @@ function ScoringRow({
   note: string;
 }) {
   return (
-    <tr className="hover:bg-gray-50">
+    <tr className="hover:bg-gray-50 dark:hover:bg-gray-800">
       <td className="px-4 py-2 font-medium">{result}</td>
       <td className="px-4 py-2 text-center font-mono">{dk}</td>
       <td className="px-4 py-2 text-center font-mono">{fd}</td>
-      <td className="px-4 py-2 text-gray-500 text-xs">{note}</td>
+      <td className="px-4 py-2 text-gray-500 dark:text-gray-400 text-xs">{note}</td>
     </tr>
   );
 }
 
 function FinishRow({ finish, dk, fd }: { finish: string; dk: string; fd: string }) {
   return (
-    <tr className="hover:bg-gray-50">
+    <tr className="hover:bg-gray-50 dark:hover:bg-gray-800">
       <td className="px-4 py-2 font-medium">{finish}</td>
       <td className="px-4 py-2 text-center font-mono">{dk}</td>
       <td className="px-4 py-2 text-center font-mono">{fd}</td>
