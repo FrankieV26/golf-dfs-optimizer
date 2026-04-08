@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { Golfer } from '@/lib/types';
+import { Golfer, Platform } from '@/lib/types';
 import { getDKGolfers } from '@/lib/draftkings';
 import { parseFanDuelCSV } from '@/lib/fanduel';
 import { fetchAllDGData, normalizeName, DGEnrichedPlayer } from '@/lib/datagolf';
+import { runSimulation } from '@/lib/simulation';
 
 /**
  * Merge Data Golf enrichment data onto a Golfer by fuzzy name match.
@@ -84,8 +85,14 @@ export async function GET(req: NextRequest) {
 
       const matchedCount = golfers.filter(g => g.dg).length;
 
+      // Run Monte Carlo simulation server-side
+      const simResults = golfers.length >= 6
+        ? runSimulation(golfers, 10_000, platform as Platform)
+        : [];
+
       return NextResponse.json({
         golfers,
+        simResults,
         draftGroupId: dkData.draftGroupId,
         tournament: dgData?.event_name || dkData.tournament,
         course: dgData?.course_name || null,
@@ -138,8 +145,14 @@ export async function POST(req: NextRequest) {
 
     const matchedCount = golfers.filter(g => g.dg).length;
 
+    // Run Monte Carlo simulation server-side
+    const simResults = golfers.length >= 6
+      ? runSimulation(golfers, 10_000, 'fanduel')
+      : [];
+
     return NextResponse.json({
       golfers,
+      simResults,
       tournament: dgData?.event_name || 'FanDuel Upload',
       course: dgData?.course_name || null,
       lastUpdated: dgData?.last_updated || null,

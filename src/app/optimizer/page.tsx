@@ -65,9 +65,7 @@ export default function OptimizerPage() {
   const [lineups, setLineups] = useState<Lineup[]>([]);
   const [simResults, setSimResults] = useState<SimulationResult[]>([]);
   const [elapsed, setElapsed] = useState<number | undefined>();
-  const [simElapsed, setSimElapsed] = useState<number | undefined>();
   const [loading, setLoading] = useState(false);
-  const [simulating, setSimulating] = useState(false);
   const [loadingPlayers, setLoadingPlayers] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [tournament, setTournament] = useState('');
@@ -103,13 +101,13 @@ export default function OptimizerPage() {
       const fetchedGolfers = data.golfers || [];
       setGolfers(fetchedGolfers);
       setTournament(data.tournament || '');
+      setSimResults(data.simResults || []);
       if (fetchedGolfers.length === 0 && data.tournament) {
         setError(`No active DraftKings slate found for ${data.tournament}. The main slate typically opens Tuesday or Wednesday before each tournament.`);
       }
       setLockedIds(new Set());
       setExcludedIds(new Set());
       setLineups([]);
-      setSimResults([]);
       setCustomProjCount(0);
       setCustomProjMsg(null);
       setActiveTab('players');
@@ -142,10 +140,10 @@ export default function OptimizerPage() {
         if (data.error) throw new Error(data.error);
         setGolfers(data.golfers || []);
         setTournament(data.tournament || 'FanDuel Upload');
+        setSimResults(data.simResults || []);
         setLockedIds(new Set());
         setExcludedIds(new Set());
         setLineups([]);
-        setSimResults([]);
         setCustomProjCount(0);
         setCustomProjMsg(null);
         setActiveTab('players');
@@ -260,28 +258,6 @@ export default function OptimizerPage() {
     setLineups([]);
     setSimResults([]);
   }, []);
-
-  const runSimulation = useCallback(async () => {
-    if (golfers.length < 6) return;
-    setSimulating(true);
-    setError(null);
-    try {
-      const res = await fetch('/api/simulate', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ golfers, platform, numSims: 10_000 }),
-      });
-      const data = await res.json();
-      if (data.error) throw new Error(data.error);
-      setSimResults(data.results || []);
-      setSimElapsed(data.elapsed_ms);
-      setActiveTab('simulation');
-    } catch (e) {
-      setError(e instanceof Error ? e.message : 'Simulation failed');
-    } finally {
-      setSimulating(false);
-    }
-  }, [golfers, platform]);
 
   const runOptimizer = useCallback(async () => {
     if (golfers.length < 6) {
@@ -501,13 +477,6 @@ export default function OptimizerPage() {
           {golfers.length > 0 && (
             <div className="mt-4 flex flex-col sm:flex-row gap-3 items-start">
               <button
-                onClick={runSimulation} disabled={simulating}
-                className="px-5 py-2.5 bg-purple-600 text-white rounded-lg text-sm font-medium hover:bg-purple-700 disabled:opacity-50 flex items-center justify-center gap-2"
-              >
-                {simulating && <span className="inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />}
-                {simulating ? 'Simulating...' : 'Run Simulation (10K)'}
-              </button>
-              <button
                 onClick={runOptimizer} disabled={loading}
                 className="px-5 py-2.5 bg-green-700 text-white rounded-lg text-sm font-medium hover:bg-green-800 disabled:opacity-50 flex items-center justify-center gap-2"
               >
@@ -614,7 +583,7 @@ export default function OptimizerPage() {
 
         {!loadingPlayers && activeTab === 'simulation' && (
           simResults.length > 0 ? (
-            <SimulationTable results={simResults} elapsed_ms={simElapsed} />
+            <SimulationTable results={simResults} />
           ) : (
             <div className="bg-white rounded-lg border border-gray-200 p-8 text-center text-gray-500">
               Click &quot;Run Simulation&quot; to model tournament outcomes with 10,000 Monte Carlo simulations
