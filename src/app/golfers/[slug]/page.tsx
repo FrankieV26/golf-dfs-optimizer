@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
+import NavBar from '@/components/NavBar';
+import Footer from '@/components/Footer';
 import { getAllGolfers, getGolferBySlug, GolferProfile } from '@/lib/golfer-data';
 import { COURSE_PROFILES } from '@/lib/course-fit';
 import { COURSE_DATA } from '@/lib/course-data';
@@ -53,14 +55,14 @@ export default async function GolferProfilePage({ params }: PageProps) {
   };
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white flex flex-col">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
       />
-      <Header currentSlug={slug} />
+      <NavBar />
 
-      <main className="max-w-4xl mx-auto px-4 py-12">
+      <main className="flex-1 max-w-4xl mx-auto px-4 py-12">
         {/* Hero */}
         <section className="mb-12">
           <div className="flex items-center gap-2 text-sm text-gray-500 mb-4">
@@ -117,12 +119,12 @@ export default async function GolferProfilePage({ params }: PageProps) {
         {/* Recent Results */}
         <section className="mb-12">
           <h2 className="text-2xl font-bold mb-4">Recent Tournament Results</h2>
-          <div className="overflow-x-auto rounded-lg border border-gray-200">
+          <div className="overflow-x-auto rounded-xl border border-gray-200 shadow-sm">
             <table className="min-w-full divide-y divide-gray-200 text-sm">
               <thead className="bg-gray-50">
                 <tr>
-                  <th className="px-4 py-3 text-left font-medium text-gray-500">Tournament</th>
-                  <th className="px-4 py-3 text-center font-medium text-gray-500">Finish</th>
+                  <th className="px-4 py-3 text-left font-medium text-gray-500 sticky top-0 bg-gray-50/95 backdrop-blur-sm z-10">Tournament</th>
+                  <th className="px-4 py-3 text-center font-medium text-gray-500 sticky top-0 bg-gray-50/95 backdrop-blur-sm z-10">Finish</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100">
@@ -205,7 +207,7 @@ export default async function GolferProfilePage({ params }: PageProps) {
           </p>
           <Link
             href="/optimizer"
-            className="inline-block px-6 py-3 bg-green-700 text-white rounded-xl font-bold hover:bg-green-800 transition-colors"
+            className="inline-block px-6 py-3 bg-green-700 text-white rounded-xl font-bold hover:bg-green-800 active:scale-[0.97] transition-all"
           >
             Launch Optimizer
           </Link>
@@ -240,47 +242,11 @@ function getRelatedGolfers(current: GolferProfile): GolferProfile[] {
     .slice(0, 8);
 }
 
-/* ─── Shared Components ─── */
-
-function Header({ currentSlug }: { currentSlug: string }) {
-  return (
-    <header className="border-b border-gray-100">
-      <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
-        <Link href="/"><img src="/logo.svg" alt="BirdieVantage" className="h-14 w-auto" /></Link>
-        <nav className="flex gap-6 text-sm">
-          <Link href="/optimizer" className="text-gray-600 hover:text-gray-800">Optimizer</Link>
-          <Link href="/live" className="text-gray-600 hover:text-gray-800">Live</Link>
-          <Link href="/strategy" className="text-gray-600 hover:text-gray-800">Strategy</Link>
-          <Link href="/scoring" className="text-gray-600 hover:text-gray-800">Scoring</Link>
-          <Link href="/golfers" className={currentSlug ? 'font-medium text-green-700' : 'text-gray-600 hover:text-gray-800'}>Golfers</Link>
-          <Link href="/courses" className="text-gray-600 hover:text-gray-800">Courses</Link>
-        </nav>
-      </div>
-    </header>
-  );
-}
-
-function Footer() {
-  return (
-    <footer className="border-t border-gray-100 py-8 mt-12">
-      <div className="max-w-6xl mx-auto px-4 flex items-center justify-between text-sm text-gray-500">
-        <span>BirdieVantage &copy; {new Date().getFullYear()}</span>
-        <div className="flex gap-6">
-          <Link href="/optimizer" className="hover:text-gray-700">Optimizer</Link>
-          <Link href="/live" className="hover:text-gray-700">Live</Link>
-          <Link href="/strategy" className="hover:text-gray-700">Strategy</Link>
-          <Link href="/scoring" className="hover:text-gray-700">Scoring</Link>
-          <Link href="/golfers" className="hover:text-gray-700">Golfers</Link>
-          <Link href="/courses" className="hover:text-gray-700">Courses</Link>
-        </div>
-      </div>
-    </footer>
-  );
-}
+/* ─── Local Components ─── */
 
 function StatCard({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-xl border border-gray-200 p-4 text-center">
+    <div className="rounded-xl border border-gray-200 p-4 text-center shadow-sm">
       <p className="text-2xl font-bold text-gray-900">{value}</p>
       <p className="text-xs text-gray-500 mt-1">{label}</p>
     </div>

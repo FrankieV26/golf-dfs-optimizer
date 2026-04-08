@@ -1,5 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import NavBar from '@/components/NavBar';
+import Footer from '@/components/Footer';
 import { getAllGolfers } from '@/lib/golfer-data';
 
 export const metadata: Metadata = {
@@ -12,22 +14,10 @@ export default function GolfersIndexPage() {
   const golfers = getAllGolfers();
 
   return (
-    <div className="min-h-screen bg-white">
-      <header className="border-b border-gray-100">
-        <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
-          <Link href="/"><img src="/logo.svg" alt="BirdieVantage" className="h-14 w-auto" /></Link>
-          <nav className="flex gap-6 text-sm">
-            <Link href="/optimizer" className="text-gray-600 hover:text-gray-800">Optimizer</Link>
-            <Link href="/live" className="text-gray-600 hover:text-gray-800">Live</Link>
-            <Link href="/strategy" className="text-gray-600 hover:text-gray-800">Strategy</Link>
-            <Link href="/scoring" className="text-gray-600 hover:text-gray-800">Scoring</Link>
-            <Link href="/golfers" className="font-medium text-green-700">Golfers</Link>
-            <Link href="/courses" className="text-gray-600 hover:text-gray-800">Courses</Link>
-          </nav>
-        </div>
-      </header>
+    <div className="min-h-screen bg-white flex flex-col">
+      <NavBar />
 
-      <main className="max-w-6xl mx-auto px-4 py-12">
+      <main className="flex-1 max-w-6xl mx-auto px-4 py-12">
         <h1 className="text-4xl font-extrabold tracking-tight text-gray-900 mb-4">
           PGA Tour Golfer DFS Profiles
         </h1>
@@ -38,18 +28,18 @@ export default function GolfersIndexPage() {
         </p>
 
         {/* Golfer Table */}
-        <div className="overflow-x-auto rounded-lg border border-gray-200">
+        <div className="overflow-x-auto rounded-xl border border-gray-200 shadow-sm">
           <table className="min-w-full divide-y divide-gray-200 text-sm">
             <thead className="bg-gray-50">
               <tr>
-                <th className="px-4 py-3 text-left font-medium text-gray-500">Rank</th>
-                <th className="px-4 py-3 text-left font-medium text-gray-500">Golfer</th>
-                <th className="px-4 py-3 text-center font-medium text-gray-500">Avg DFS Pts</th>
-                <th className="px-4 py-3 text-center font-medium text-gray-500">Cut Rate</th>
-                <th className="px-4 py-3 text-center font-medium text-gray-500">SG: Total</th>
-                <th className="px-4 py-3 text-center font-medium text-gray-500">SG: APP</th>
-                <th className="px-4 py-3 text-center font-medium text-gray-500">SG: OTT</th>
-                <th className="px-4 py-3 text-center font-medium text-gray-500 hidden md:table-cell">Country</th>
+                <th className="px-4 py-3 text-left font-medium text-gray-500 sticky top-0 bg-gray-50/95 backdrop-blur-sm z-10">Rank</th>
+                <th className="px-4 py-3 text-left font-medium text-gray-500 sticky top-0 bg-gray-50/95 backdrop-blur-sm z-10">Golfer</th>
+                <th className="px-4 py-3 text-center font-medium text-gray-500 sticky top-0 bg-gray-50/95 backdrop-blur-sm z-10">Avg DFS Pts</th>
+                <th className="px-4 py-3 text-center font-medium text-gray-500 sticky top-0 bg-gray-50/95 backdrop-blur-sm z-10">Cut Rate</th>
+                <th className="px-4 py-3 text-center font-medium text-gray-500 sticky top-0 bg-gray-50/95 backdrop-blur-sm z-10">SG: Total</th>
+                <th className="px-4 py-3 text-center font-medium text-gray-500 sticky top-0 bg-gray-50/95 backdrop-blur-sm z-10">SG: APP</th>
+                <th className="px-4 py-3 text-center font-medium text-gray-500 sticky top-0 bg-gray-50/95 backdrop-blur-sm z-10">SG: OTT</th>
+                <th className="px-4 py-3 text-center font-medium text-gray-500 hidden md:table-cell sticky top-0 bg-gray-50/95 backdrop-blur-sm z-10">Country</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
@@ -132,26 +122,14 @@ export default function GolfersIndexPage() {
           </p>
           <Link
             href="/optimizer"
-            className="inline-block px-6 py-3 bg-green-700 text-white rounded-xl font-bold hover:bg-green-800 transition-colors"
+            className="inline-block px-6 py-3 bg-green-700 text-white rounded-xl font-bold hover:bg-green-800 active:scale-[0.97] transition-all"
           >
             Launch Optimizer
           </Link>
         </div>
       </main>
 
-      <footer className="border-t border-gray-100 py-8 mt-12">
-        <div className="max-w-6xl mx-auto px-4 flex items-center justify-between text-sm text-gray-500">
-          <span>BirdieVantage &copy; {new Date().getFullYear()}</span>
-          <div className="flex gap-6">
-            <Link href="/optimizer" className="hover:text-gray-700">Optimizer</Link>
-            <Link href="/live" className="hover:text-gray-700">Live</Link>
-            <Link href="/strategy" className="hover:text-gray-700">Strategy</Link>
-            <Link href="/scoring" className="hover:text-gray-700">Scoring</Link>
-            <Link href="/golfers" className="hover:text-gray-700">Golfers</Link>
-            <Link href="/courses" className="hover:text-gray-700">Courses</Link>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }

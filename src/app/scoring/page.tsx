@@ -1,5 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import NavBar from '@/components/NavBar';
+import Footer from '@/components/Footer';
 
 export const metadata: Metadata = {
   title: 'Golf DFS Scoring Rules - DraftKings vs FanDuel Comparison',
@@ -9,22 +11,10 @@ export const metadata: Metadata = {
 
 export default function ScoringPage() {
   return (
-    <div className="min-h-screen bg-white">
-      <header className="border-b border-gray-100">
-        <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
-          <Link href="/"><img src="/logo.svg" alt="BirdieVantage" className="h-14 w-auto" /></Link>
-          <nav className="flex gap-6 text-sm">
-            <Link href="/optimizer" className="text-gray-600 hover:text-gray-800">Optimizer</Link>
-            <Link href="/live" className="text-gray-600 hover:text-gray-800">Live</Link>
-            <Link href="/strategy" className="text-gray-600 hover:text-gray-800">Strategy</Link>
-            <Link href="/scoring" className="font-medium text-green-700">Scoring</Link>
-            <Link href="/golfers" className="text-gray-600 hover:text-gray-800">Golfers</Link>
-            <Link href="/courses" className="text-gray-600 hover:text-gray-800">Courses</Link>
-          </nav>
-        </div>
-      </header>
+    <div className="min-h-screen bg-white flex flex-col">
+      <NavBar />
 
-      <main className="max-w-4xl mx-auto px-4 py-12">
+      <main className="flex-1 max-w-4xl mx-auto px-4 py-12">
         <h1 className="text-4xl font-extrabold mb-4">Golf DFS Scoring Rules</h1>
         <p className="text-lg text-gray-600 mb-10">
           Complete comparison of DraftKings and FanDuel golf fantasy scoring for the 2025-2026 PGA Tour season.
@@ -51,14 +41,14 @@ export default function ScoringPage() {
 
         {/* Per-Hole Scoring */}
         <h2 className="text-2xl font-bold mb-4">Per-Hole Scoring</h2>
-        <div className="overflow-x-auto rounded-lg border border-gray-200 mb-12">
+        <div className="overflow-x-auto rounded-xl border border-gray-200 shadow-sm mb-12">
           <table className="min-w-full divide-y divide-gray-200 text-sm">
             <thead className="bg-gray-50">
               <tr>
-                <th className="px-4 py-3 text-left font-medium text-gray-500">Result</th>
-                <th className="px-4 py-3 text-center font-medium text-green-700">DraftKings</th>
-                <th className="px-4 py-3 text-center font-medium text-blue-700">FanDuel</th>
-                <th className="px-4 py-3 text-left font-medium text-gray-500">Strategy Note</th>
+                <th className="px-4 py-3 text-left font-medium text-gray-500 sticky top-0 bg-gray-50/95 backdrop-blur-sm z-10">Result</th>
+                <th className="px-4 py-3 text-center font-medium text-green-700 sticky top-0 bg-gray-50/95 backdrop-blur-sm z-10">DraftKings</th>
+                <th className="px-4 py-3 text-center font-medium text-blue-700 sticky top-0 bg-gray-50/95 backdrop-blur-sm z-10">FanDuel</th>
+                <th className="px-4 py-3 text-left font-medium text-gray-500 sticky top-0 bg-gray-50/95 backdrop-blur-sm z-10">Strategy Note</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
@@ -96,13 +86,13 @@ export default function ScoringPage() {
 
         {/* Finish Position Bonuses */}
         <h2 className="text-2xl font-bold mb-4">Finish Position Bonuses</h2>
-        <div className="overflow-x-auto rounded-lg border border-gray-200 mb-12">
+        <div className="overflow-x-auto rounded-xl border border-gray-200 shadow-sm mb-12">
           <table className="min-w-full divide-y divide-gray-200 text-sm">
             <thead className="bg-gray-50">
               <tr>
-                <th className="px-4 py-3 text-left font-medium text-gray-500">Finish</th>
-                <th className="px-4 py-3 text-center font-medium text-green-700">DraftKings</th>
-                <th className="px-4 py-3 text-center font-medium text-blue-700">FanDuel</th>
+                <th className="px-4 py-3 text-left font-medium text-gray-500 sticky top-0 bg-gray-50/95 backdrop-blur-sm z-10">Finish</th>
+                <th className="px-4 py-3 text-center font-medium text-green-700 sticky top-0 bg-gray-50/95 backdrop-blur-sm z-10">DraftKings</th>
+                <th className="px-4 py-3 text-center font-medium text-blue-700 sticky top-0 bg-gray-50/95 backdrop-blur-sm z-10">FanDuel</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
@@ -159,7 +149,7 @@ export default function ScoringPage() {
           </p>
           <Link
             href="/optimizer"
-            className="inline-block px-6 py-3 bg-green-700 text-white rounded-xl font-bold hover:bg-green-800"
+            className="inline-block px-6 py-3 bg-green-700 text-white rounded-xl font-bold hover:bg-green-800 active:scale-[0.97] transition-all"
           >
             Launch Optimizer
           </Link>
@@ -200,19 +190,7 @@ export default function ScoringPage() {
         </div>
       </main>
 
-      <footer className="border-t border-gray-100 py-8 mt-12">
-        <div className="max-w-6xl mx-auto px-4 flex items-center justify-between text-sm text-gray-500">
-          <span>BirdieVantage &copy; {new Date().getFullYear()}</span>
-          <div className="flex gap-6">
-            <Link href="/optimizer" className="hover:text-gray-700">Optimizer</Link>
-            <Link href="/live" className="hover:text-gray-700">Live</Link>
-            <Link href="/strategy" className="hover:text-gray-700">Strategy</Link>
-            <Link href="/scoring" className="hover:text-gray-700">Scoring</Link>
-            <Link href="/golfers" className="hover:text-gray-700">Golfers</Link>
-            <Link href="/courses" className="hover:text-gray-700">Courses</Link>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }

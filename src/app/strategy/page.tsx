@@ -1,5 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import NavBar from '@/components/NavBar';
+import Footer from '@/components/Footer';
 
 export const metadata: Metadata = {
   title: 'Golf DFS Strategy Guide - Tips for DraftKings & FanDuel',
@@ -9,22 +11,10 @@ export const metadata: Metadata = {
 
 export default function StrategyPage() {
   return (
-    <div className="min-h-screen bg-white">
-      <header className="border-b border-gray-100">
-        <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
-          <Link href="/"><img src="/logo.svg" alt="BirdieVantage" className="h-14 w-auto" /></Link>
-          <nav className="flex gap-6 text-sm">
-            <Link href="/optimizer" className="text-gray-600 hover:text-gray-800">Optimizer</Link>
-            <Link href="/live" className="text-gray-600 hover:text-gray-800">Live</Link>
-            <Link href="/strategy" className="font-medium text-green-700">Strategy</Link>
-            <Link href="/scoring" className="text-gray-600 hover:text-gray-800">Scoring</Link>
-            <Link href="/golfers" className="text-gray-600 hover:text-gray-800">Golfers</Link>
-            <Link href="/courses" className="text-gray-600 hover:text-gray-800">Courses</Link>
-          </nav>
-        </div>
-      </header>
+    <div className="min-h-screen bg-white flex flex-col">
+      <NavBar />
 
-      <main className="max-w-3xl mx-auto px-4 py-12">
+      <main className="flex-1 max-w-3xl mx-auto px-4 py-12">
         <h1 className="text-4xl font-extrabold mb-8">Golf DFS Strategy Guide</h1>
 
         <div className="prose prose-gray max-w-none space-y-8">
@@ -141,7 +131,7 @@ export default function StrategyPage() {
             </p>
             <Link
               href="/optimizer"
-              className="inline-block px-6 py-3 bg-green-700 text-white rounded-xl font-bold hover:bg-green-800"
+              className="inline-block px-6 py-3 bg-green-700 text-white rounded-xl font-bold hover:bg-green-800 active:scale-[0.97] transition-all"
             >
               Launch Optimizer
             </Link>
@@ -176,19 +166,7 @@ export default function StrategyPage() {
         </div>
       </main>
 
-      <footer className="border-t border-gray-100 py-8 mt-12">
-        <div className="max-w-6xl mx-auto px-4 flex items-center justify-between text-sm text-gray-500">
-          <span>BirdieVantage &copy; {new Date().getFullYear()}</span>
-          <div className="flex gap-6">
-            <Link href="/optimizer" className="hover:text-gray-700">Optimizer</Link>
-            <Link href="/live" className="hover:text-gray-700">Live</Link>
-            <Link href="/strategy" className="hover:text-gray-700">Strategy</Link>
-            <Link href="/scoring" className="hover:text-gray-700">Scoring</Link>
-            <Link href="/golfers" className="hover:text-gray-700">Golfers</Link>
-            <Link href="/courses" className="hover:text-gray-700">Courses</Link>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }

@@ -1,6 +1,8 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
+import NavBar from '@/components/NavBar';
+import Footer from '@/components/Footer';
 
 interface LeaderboardEntry {
   player_name: string;
@@ -104,12 +106,10 @@ export default function LivePage() {
     }
   }, []);
 
-  // Initial fetch
   useEffect(() => {
     fetchLeaderboard();
   }, [fetchLeaderboard]);
 
-  // Auto-refresh every 60s
   useEffect(() => {
     const interval = setInterval(fetchLeaderboard, 60_000);
     return () => clearInterval(interval);
@@ -124,60 +124,36 @@ export default function LivePage() {
   const countdown = useCountdown(nextTournament?.startTime ?? null);
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <header className="bg-white border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
-          <a href="/">
-            <img src="/logo.svg" alt="BirdieVantage" className="h-14 w-auto" />
-          </a>
-          <nav className="flex gap-6 text-sm">
-            <a href="/optimizer" className="text-gray-600 hover:text-gray-800">
-              Optimizer
-            </a>
-            <a href="/live" className="font-medium text-green-700">
-              Live
-            </a>
-            <a href="/strategy" className="text-gray-600 hover:text-gray-800">
-              Strategy
-            </a>
-            <a href="/scoring" className="text-gray-600 hover:text-gray-800">
-              Scoring
-            </a>
-            <a href="/golfers" className="text-gray-600 hover:text-gray-800">
-              Golfers
-            </a>
-            <a href="/courses" className="text-gray-600 hover:text-gray-800">
-              Courses
-            </a>
-          </nav>
-        </div>
-      </header>
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-950 flex flex-col">
+      <NavBar maxWidth="max-w-6xl" />
 
-      <main className="max-w-6xl mx-auto px-4 py-8">
+      <main className="max-w-6xl mx-auto px-4 py-8 flex-1 w-full">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 gap-4">
           <div>
-            <h1 className="text-3xl font-bold">Live Leaderboard</h1>
+            <h1 className="text-2xl sm:text-3xl font-bold dark:text-gray-100">Live Leaderboard</h1>
             {data?.event_name && (
-              <p className="text-gray-600 mt-1">{data.event_name}</p>
+              <p className="text-gray-500 dark:text-gray-400 mt-1">{data.event_name}</p>
             )}
           </div>
           {data && (
-            <p className="text-sm text-gray-500">
+            <div className="flex items-center gap-2 text-sm text-gray-400">
+              <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
               Last Refreshed: {new Date(data.last_updated).toLocaleTimeString()}
-            </p>
+            </div>
           )}
         </div>
 
+        {/* Loading skeleton */}
         {loading && (
-          <div className="overflow-x-auto rounded-lg border border-gray-200 bg-white">
-            <table className="min-w-[800px] w-full divide-y divide-gray-200 text-sm">
-              <thead className="bg-gray-50">
+          <div className="overflow-x-auto rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 shadow-sm">
+            <table className="min-w-[800px] w-full divide-y divide-gray-200 dark:divide-gray-700 text-sm">
+              <thead className="bg-gray-50 dark:bg-gray-800">
                 <tr>
                   {['Pos', 'Player', 'Total', 'Today', 'Thru', 'R1', 'R2', 'R3', 'R4', 'SG Total'].map(
                     (h) => (
                       <th
                         key={h}
-                        className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase"
+                        className="px-3 py-2.5 text-left text-xs font-medium text-gray-500 uppercase"
                       >
                         {h}
                       </th>
@@ -185,19 +161,13 @@ export default function LivePage() {
                   )}
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-100">
+              <tbody className="divide-y divide-gray-100 dark:divide-gray-800">
                 {Array.from({ length: 20 }).map((_, i) => (
                   <tr key={i}>
-                    <td className="px-3 py-2.5">
-                      <div className="h-4 w-8 rounded bg-gray-200 animate-pulse" />
-                    </td>
-                    <td className="px-3 py-2.5">
-                      <div className="h-4 w-36 rounded bg-gray-200 animate-pulse" />
-                    </td>
+                    <td className="px-3 py-2.5"><div className="h-4 w-8 rounded animate-shimmer" /></td>
+                    <td className="px-3 py-2.5"><div className="h-4 w-36 rounded animate-shimmer" /></td>
                     {Array.from({ length: 8 }).map((_, j) => (
-                      <td key={j} className="px-3 py-2.5">
-                        <div className="h-4 w-10 rounded bg-gray-200 animate-pulse" />
-                      </td>
+                      <td key={j} className="px-3 py-2.5"><div className="h-4 w-10 rounded animate-shimmer" /></td>
                     ))}
                   </tr>
                 ))}
@@ -206,8 +176,9 @@ export default function LivePage() {
           </div>
         )}
 
+        {/* Countdown */}
         {showCountdown && nextTournament && (
-          <div className="bg-white rounded-lg border border-gray-200 p-12 text-center">
+          <div className="bg-white rounded-xl border border-gray-200 p-12 text-center shadow-sm">
             <p className="text-lg text-gray-700 mb-2">
               Next Up: <span className="font-semibold">{nextTournament.name}</span>
             </p>
@@ -234,89 +205,95 @@ export default function LivePage() {
                 timeZoneName: 'short',
               })}
             </p>
-            <div className="text-4xl font-bold text-green-700 tabular-nums">
+            <div className="text-4xl font-bold text-green-700 tabular-nums font-mono">
               {countdown}
             </div>
             <p className="text-xs text-gray-400 mt-2">until Round 1 tee times</p>
           </div>
         )}
 
+        {/* No tournament */}
         {!loading && !hasLeaderboard && !showCountdown && (
-          <div className="bg-white rounded-lg border border-gray-200 p-12 text-center text-gray-500">
-            <p className="text-lg mb-2">No tournament currently in progress</p>
-            <p className="text-sm">
-              The live leaderboard is available Thursday through Sunday during PGA
-              Tour events.
+          <div className="bg-white rounded-xl border border-gray-200 p-12 text-center shadow-sm">
+            <div className="text-gray-300 mb-4 flex justify-center">
+              <svg className="w-16 h-16" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <p className="text-lg font-semibold text-gray-700 dark:text-gray-200 mb-1.5">No tournament in progress</p>
+            <p className="text-sm text-gray-500 dark:text-gray-400">
+              The live leaderboard is available Thursday through Sunday during PGA Tour events.
             </p>
           </div>
         )}
 
+        {/* Leaderboard */}
         {!loading && hasLeaderboard && data && (
-          <div className="overflow-x-auto rounded-lg border border-gray-200 bg-white">
-            <table className="min-w-[800px] w-full divide-y divide-gray-200 text-sm">
-              <thead className="bg-gray-50">
+          <div className="overflow-x-auto rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 shadow-sm max-h-[75vh] overflow-y-auto">
+            <table className="min-w-[800px] w-full divide-y divide-gray-200 dark:divide-gray-700 text-sm">
+              <thead className="bg-gray-50 dark:bg-gray-800">
                 <tr>
-                  <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase w-16">
+                  <th className="px-3 py-2.5 text-left text-xs font-medium text-gray-500 uppercase w-16 sticky top-0 bg-gray-50/95 dark:bg-gray-800/95 backdrop-blur-sm z-10">
                     Pos
                   </th>
-                  <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">
+                  <th className="px-3 py-2.5 text-left text-xs font-medium text-gray-500 uppercase sticky top-0 bg-gray-50/95 dark:bg-gray-800/95 backdrop-blur-sm z-10">
                     Player
                   </th>
-                  <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">
+                  <th className="px-3 py-2.5 text-right text-xs font-medium text-gray-500 uppercase sticky top-0 bg-gray-50/95 dark:bg-gray-800/95 backdrop-blur-sm z-10">
                     Total
                   </th>
-                  <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">
+                  <th className="px-3 py-2.5 text-right text-xs font-medium text-gray-500 uppercase sticky top-0 bg-gray-50/95 dark:bg-gray-800/95 backdrop-blur-sm z-10">
                     Today
                   </th>
-                  <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">
+                  <th className="px-3 py-2.5 text-center text-xs font-medium text-gray-500 uppercase sticky top-0 bg-gray-50/95 dark:bg-gray-800/95 backdrop-blur-sm z-10">
                     Thru
                   </th>
-                  <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">
+                  <th className="px-3 py-2.5 text-right text-xs font-medium text-gray-500 uppercase sticky top-0 bg-gray-50/95 dark:bg-gray-800/95 backdrop-blur-sm z-10">
                     R1
                   </th>
-                  <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">
+                  <th className="px-3 py-2.5 text-right text-xs font-medium text-gray-500 uppercase sticky top-0 bg-gray-50/95 dark:bg-gray-800/95 backdrop-blur-sm z-10">
                     R2
                   </th>
-                  <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">
+                  <th className="px-3 py-2.5 text-right text-xs font-medium text-gray-500 uppercase sticky top-0 bg-gray-50/95 dark:bg-gray-800/95 backdrop-blur-sm z-10">
                     R3
                   </th>
-                  <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">
+                  <th className="px-3 py-2.5 text-right text-xs font-medium text-gray-500 uppercase sticky top-0 bg-gray-50/95 dark:bg-gray-800/95 backdrop-blur-sm z-10">
                     R4
                   </th>
-                  <th className="px-3 py-2 text-right text-xs font-medium text-gray-500 uppercase">
+                  <th className="px-3 py-2.5 text-right text-xs font-medium text-gray-500 uppercase sticky top-0 bg-gray-50/95 dark:bg-gray-800/95 backdrop-blur-sm z-10">
                     SG Total
                   </th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-100">
+              <tbody className="divide-y divide-gray-100 dark:divide-gray-800">
                 {data.leaderboard.map((p, i) => {
                   const isMC =
                     p.position === 'MC' || p.position === 'WD' || p.position === 'CUT';
                   return (
                     <tr
                       key={`${p.player_name}-${i}`}
-                      className={`${isMC ? 'opacity-50' : ''} ${i % 2 === 0 ? '' : 'bg-gray-50'}`}
+                      className={`transition-colors ${isMC ? 'opacity-40' : 'hover:bg-gray-50/80'}`}
                     >
-                      <td className="px-3 py-1.5 font-bold text-gray-700">
+                      <td className="px-3 py-2 font-bold text-gray-700 dark:text-gray-300 font-mono">
                         {p.position}
                       </td>
-                      <td className="px-3 py-1.5 font-medium whitespace-nowrap">
+                      <td className="px-3 py-2 font-medium whitespace-nowrap">
                         {p.player_name}
                       </td>
-                      <td className={`px-3 py-1.5 font-semibold ${scoreColor(p.total)}`}>
+                      <td className={`px-3 py-2 text-right font-semibold font-mono ${scoreColor(p.total)}`}>
                         {formatScore(p.total)}
                       </td>
-                      <td className={`px-3 py-1.5 ${scoreColor(p.today)}`}>
+                      <td className={`px-3 py-2 text-right font-mono ${scoreColor(p.today)}`}>
                         {formatScore(p.today)}
                       </td>
-                      <td className="px-3 py-1.5 text-gray-600">
+                      <td className="px-3 py-2 text-center text-gray-600 dark:text-gray-400 font-mono">
                         {p.thru === 18 || p.thru === 'F' ? 'F' : p.thru}
                       </td>
-                      <td className="px-3 py-1.5 text-gray-600">{formatRound(p.r1)}</td>
-                      <td className="px-3 py-1.5 text-gray-600">{formatRound(p.r2)}</td>
-                      <td className="px-3 py-1.5 text-gray-600">{formatRound(p.r3)}</td>
-                      <td className="px-3 py-1.5 text-gray-600">{formatRound(p.r4)}</td>
-                      <td className="px-3 py-1.5 text-right">
+                      <td className="px-3 py-2 text-right text-gray-600 dark:text-gray-400 font-mono">{formatRound(p.r1)}</td>
+                      <td className="px-3 py-2 text-right text-gray-600 dark:text-gray-400 font-mono">{formatRound(p.r2)}</td>
+                      <td className="px-3 py-2 text-right text-gray-600 dark:text-gray-400 font-mono">{formatRound(p.r3)}</td>
+                      <td className="px-3 py-2 text-right text-gray-600 dark:text-gray-400 font-mono">{formatRound(p.r4)}</td>
+                      <td className="px-3 py-2 text-right font-mono">
                         {p.sg_total != null ? (
                           <span
                             className={`font-medium ${
@@ -327,7 +304,7 @@ export default function LivePage() {
                             {p.sg_total.toFixed(1)}
                           </span>
                         ) : (
-                          <span className="text-gray-400">-</span>
+                          <span className="text-gray-300">-</span>
                         )}
                       </td>
                     </tr>
@@ -337,7 +314,18 @@ export default function LivePage() {
             </table>
           </div>
         )}
+
+        {error && (
+          <div className="bg-red-50 border border-red-200 text-red-700 rounded-xl px-4 py-3 mt-4 text-sm flex items-start gap-3">
+            <svg className="w-5 h-5 text-red-400 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <span>{error}</span>
+          </div>
+        )}
       </main>
+
+      <Footer />
     </div>
   );
 }
