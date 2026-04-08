@@ -16,10 +16,19 @@ interface LeaderboardEntry {
   sg_total: number | null;
 }
 
+interface NextTournament {
+  name: string;
+  startTime: string;
+  location: string | null;
+  courseSlug: string | null;
+  courseName: string | null;
+}
+
 interface LiveData {
-  event_name: string;
+  event_name: string | null;
   last_updated: string;
   leaderboard: LeaderboardEntry[];
+  nextTournament: NextTournament | null;
 }
 
 function scoreColor(score: number): string {
@@ -39,10 +48,48 @@ function formatRound(score: number | null): string {
   return String(score);
 }
 
+function useCountdown(targetDate: string | null) {
+  const [timeLeft, setTimeLeft] = useState('');
+
+  useEffect(() => {
+    if (!targetDate) return;
+
+    function update() {
+      const now = Date.now();
+      const target = new Date(targetDate!).getTime();
+      const diff = target - now;
+
+      if (diff <= 0) {
+        setTimeLeft('Starting now');
+        return;
+      }
+
+      const days = Math.floor(diff / 86400000);
+      const hours = Math.floor((diff % 86400000) / 3600000);
+      const minutes = Math.floor((diff % 3600000) / 60000);
+      const seconds = Math.floor((diff % 60000) / 1000);
+
+      const parts: string[] = [];
+      if (days > 0) parts.push(`${days}d`);
+      if (hours > 0) parts.push(`${hours}h`);
+      if (minutes > 0) parts.push(`${minutes}m`);
+      parts.push(`${seconds}s`);
+      setTimeLeft(parts.join(' '));
+    }
+
+    update();
+    const interval = setInterval(update, 1000);
+    return () => clearInterval(interval);
+  }, [targetDate]);
+
+  return timeLeft;
+}
+
 export default function LivePage() {
   const [data, setData] = useState<LiveData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
   const fetchLeaderboard = useCallback(async () => {
     try {
       const res = await fetch('/api/live');
@@ -67,6 +114,14 @@ export default function LivePage() {
     const interval = setInterval(fetchLeaderboard, 60_000);
     return () => clearInterval(interval);
   }, [fetchLeaderboard]);
+
+  const nextTournament = data?.nextTournament ?? null;
+  const tournamentStarted = nextTournament
+    ? new Date(nextTournament.startTime).getTime() <= Date.now()
+    : true;
+  const hasLeaderboard = data && data.leaderboard.length > 0 && tournamentStarted;
+  const showCountdown = !loading && nextTournament && !tournamentStarted;
+  const countdown = useCountdown(nextTournament?.startTime ?? null);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -151,7 +206,42 @@ export default function LivePage() {
           </div>
         )}
 
-        {error && !loading && (
+        {showCountdown && nextTournament && (
+          <div className="bg-white rounded-lg border border-gray-200 p-12 text-center">
+            <p className="text-lg text-gray-700 mb-2">
+              Next Up: <span className="font-semibold">{nextTournament.name}</span>
+            </p>
+            {nextTournament.location && (
+              <p className="text-sm text-gray-500 mb-1">{nextTournament.location}</p>
+            )}
+            {nextTournament.courseSlug ? (
+              <a
+                href={`/courses/${nextTournament.courseSlug}`}
+                className="text-sm text-green-700 hover:underline"
+              >
+                {nextTournament.courseName} →
+              </a>
+            ) : nextTournament.courseName ? (
+              <p className="text-sm text-gray-500">{nextTournament.courseName}</p>
+            ) : null}
+            <p className="text-sm text-gray-500 mt-3 mb-6">
+              {new Date(nextTournament.startTime).toLocaleDateString('en-US', {
+                weekday: 'long',
+                month: 'long',
+                day: 'numeric',
+                hour: 'numeric',
+                minute: '2-digit',
+                timeZoneName: 'short',
+              })}
+            </p>
+            <div className="text-4xl font-bold text-green-700 tabular-nums">
+              {countdown}
+            </div>
+            <p className="text-xs text-gray-400 mt-2">until Round 1 tee times</p>
+          </div>
+        )}
+
+        {!loading && !hasLeaderboard && !showCountdown && (
           <div className="bg-white rounded-lg border border-gray-200 p-12 text-center text-gray-500">
             <p className="text-lg mb-2">No tournament currently in progress</p>
             <p className="text-sm">
@@ -161,17 +251,7 @@ export default function LivePage() {
           </div>
         )}
 
-        {!loading && !error && data && data.leaderboard.length === 0 && (
-          <div className="bg-white rounded-lg border border-gray-200 p-12 text-center text-gray-500">
-            <p className="text-lg mb-2">No tournament currently in progress</p>
-            <p className="text-sm">
-              The live leaderboard is available Thursday through Sunday during PGA
-              Tour events.
-            </p>
-          </div>
-        )}
-
-        {!loading && data && data.leaderboard.length > 0 && (
+        {!loading && hasLeaderboard && data && (
           <div className="overflow-x-auto rounded-lg border border-gray-200 bg-white">
             <table className="min-w-[800px] w-full divide-y divide-gray-200 text-sm">
               <thead className="bg-gray-50">
@@ -210,7 +290,8 @@ export default function LivePage() {
               </thead>
               <tbody className="divide-y divide-gray-100">
                 {data.leaderboard.map((p, i) => {
-                  const isMC = p.position === 'MC' || p.position === 'WD' || p.position === 'CUT';
+                  const isMC =
+                    p.position === 'MC' || p.position === 'WD' || p.position === 'CUT';
                   return (
                     <tr
                       key={`${p.player_name}-${i}`}
