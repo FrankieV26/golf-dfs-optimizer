@@ -46,6 +46,33 @@ function normalRandom(rng: () => number, mean: number, stddev: number): number {
 }
 
 /**
+ * Right-skewed round score generator using a mixture model.
+ *
+ * Golf DFS scoring has a natural positive skew: finish bonuses,
+ * birdie streak bonuses, and eagle bonuses create heavier right tails
+ * than a normal distribution captures. Normal distributions underestimate
+ * the probability of a player "going off" with a great round.
+ *
+ * Mixture: 85% normal rounds + 15% "hot" rounds (higher mean).
+ * The base mean is adjusted down so the overall expected value
+ * is preserved — this adds skew without inflating projections.
+ */
+const BOOM_PROB = 0.15;
+const BOOM_SHIFT = 1.0; // hot round shifts mean up by 1.0 * stddev
+
+function skewedRandom(rng: () => number, mean: number, stddev: number): number {
+  // Adjust base mean down to preserve overall expected value:
+  // E[mix] = (1-p)*adjustedMean + p*(adjustedMean + shift*std) = mean
+  const adjustedMean = mean - BOOM_PROB * BOOM_SHIFT * stddev;
+
+  if (rng() < BOOM_PROB) {
+    // Hot round: higher mean, slightly tighter variance (locked-in play)
+    return normalRandom(rng, adjustedMean + BOOM_SHIFT * stddev, stddev * 0.85);
+  }
+  return normalRandom(rng, adjustedMean, stddev);
+}
+
+/**
  * Estimate a golfer's per-round scoring parameters.
  *
  * When Data Golf data is available, uses their projected points and std_dev
@@ -140,11 +167,13 @@ export function runSimulation(
 
   for (let sim = 0; sim < numSims; sim++) {
     // Generate round scores (fantasy points per round)
+    // Uses skewed distribution to model DFS scoring upside (birdie streaks,
+    // eagle bonuses, finish bonuses) more realistically than pure normal.
     const roundScores: number[][] = []; // [golfer][round]
     for (let i = 0; i < n; i++) {
       const rounds: number[] = [];
       for (let r = 0; r < 4; r++) {
-        rounds.push(normalRandom(rng, params[i].roundMean, params[i].roundStd));
+        rounds.push(skewedRandom(rng, params[i].roundMean, params[i].roundStd));
       }
       roundScores.push(rounds);
     }

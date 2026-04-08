@@ -87,6 +87,7 @@ export interface OptimizerSettings {
   excludedGolfers: number[]; // golfer IDs to exclude
   minSalary?: number;        // override minimum salary floor
   diversityWeight: number;   // 0 = pure optimization, 1 = maximum diversity
+  courseFitWeight: number;   // 0 = no extra emphasis, 1 = full course fit boost
 }
 
 export const DEFAULT_SETTINGS: OptimizerSettings = {
@@ -96,6 +97,7 @@ export const DEFAULT_SETTINGS: OptimizerSettings = {
   lockedGolfers: [],
   excludedGolfers: [],
   diversityWeight: 0.3,
+  courseFitWeight: 0.5,
 };
 
 // DraftKings Golf Classic scoring

@@ -11,9 +11,44 @@ import {
 } from '@/lib/types';
 import { SimulationResult } from '@/lib/simulation';
 import { normalizeName } from '@/lib/normalize-name';
+import { COURSE_PROFILES } from '@/lib/course-fit';
 import GolferTable, { GolferSortField } from '@/components/GolferTable';
 import LineupResults from '@/components/LineupResults';
 import SimulationTable from '@/components/SimulationTable';
+
+/** Match a DG course name (e.g. "Augusta National Golf Club") to a known profile key */
+function matchCourseProfile(courseName: string): string | null {
+  if (!courseName) return null;
+  const lower = courseName.toLowerCase();
+  const matchers: [string, string][] = [
+    ['augusta', 'augusta-national'],
+    ['sawgrass', 'tpc-sawgrass'],
+    ['pebble', 'pebble-beach'],
+    ['torrey', 'torrey-pines-south'],
+    ['bay hill', 'bay-hill'],
+    ['scottsdale', 'tpc-scottsdale'],
+    ['valhalla', 'valhalla'],
+    ['pinehurst', 'pinehurst-no2'],
+  ];
+  for (const [keyword, profileId] of matchers) {
+    if (lower.includes(keyword)) return profileId;
+  }
+  return null;
+}
+
+/** Compute course fit stats from golfer data */
+function getCourseFitStats(golfers: readonly { dg?: { courseFitAdj: number } }[], weight: number) {
+  const SG_TO_FPTS = 3.0;
+  const adjs = golfers
+    .map(g => (g.dg?.courseFitAdj ?? 0) * weight * SG_TO_FPTS)
+    .filter(v => v !== 0);
+  if (adjs.length === 0) return null;
+  return {
+    min: Math.min(...adjs),
+    max: Math.max(...adjs),
+    count: adjs.length,
+  };
+}
 
 type Tab = 'players' | 'simulation' | 'lineups';
 
@@ -69,12 +104,14 @@ export default function OptimizerPage() {
   const [loadingPlayers, setLoadingPlayers] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [tournament, setTournament] = useState('');
+  const [courseName, setCourseName] = useState('');
   const [activeTab, setActiveTab] = useState<Tab>('players');
 
   // Settings
   const [maxLineups, setMaxLineups] = useState(DEFAULT_SETTINGS.maxLineups);
   const [maxExposure, setMaxExposure] = useState(DEFAULT_SETTINGS.maxExposure);
   const [useGPPMode, setUseGPPMode] = useState(false);
+  const [courseFitWeight, setCourseFitWeight] = useState(DEFAULT_SETTINGS.courseFitWeight);
 
   // Player locks/exclusions
   const [lockedIds, setLockedIds] = useState<Set<number>>(new Set());
@@ -101,6 +138,7 @@ export default function OptimizerPage() {
       const fetchedGolfers = data.golfers || [];
       setGolfers(fetchedGolfers);
       setTournament(data.tournament || '');
+      setCourseName(data.course || '');
       setSimResults(data.simResults || []);
       if (fetchedGolfers.length === 0 && data.tournament) {
         setError(`No active DraftKings slate found for ${data.tournament}. The main slate typically opens Tuesday or Wednesday before each tournament.`);
@@ -140,6 +178,7 @@ export default function OptimizerPage() {
         if (data.error) throw new Error(data.error);
         setGolfers(data.golfers || []);
         setTournament(data.tournament || 'FanDuel Upload');
+        setCourseName(data.course || '');
         setSimResults(data.simResults || []);
         setLockedIds(new Set());
         setExcludedIds(new Set());
@@ -274,6 +313,7 @@ export default function OptimizerPage() {
         lockedGolfers: [...lockedIds],
         excludedGolfers: [...excludedIds],
         diversityWeight: useGPPMode ? 0.5 : 0.3,
+        courseFitWeight,
       };
       const res = await fetch('/api/optimize', {
         method: 'POST',
@@ -290,7 +330,7 @@ export default function OptimizerPage() {
     } finally {
       setLoading(false);
     }
-  }, [golfers, platform, maxLineups, maxExposure, lockedIds, excludedIds, useGPPMode]);
+  }, [golfers, platform, maxLineups, maxExposure, lockedIds, excludedIds, useGPPMode, courseFitWeight]);
 
   const toggleLock = (id: number) => {
     setLockedIds((prev) => {
@@ -405,6 +445,58 @@ export default function OptimizerPage() {
                 onChange={(e) => setMaxExposure(Number(e.target.value))}
                 className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm"
               />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Course Fit
+                <span className="relative group inline-block ml-1">
+                  <span className="inline-flex items-center justify-center w-4 h-4 rounded-full bg-gray-200 text-gray-500 text-xs cursor-help">?</span>
+                  <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-64 px-3 py-2 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-10">
+                    How much to boost/penalize players based on how their skill profile fits this week&apos;s course. 0 = projections only, 100 = maximum course fit emphasis.
+                  </span>
+                </span>
+              </label>
+              <div className="flex items-center gap-2">
+                <input
+                  type="range" min={0} max={100} value={Math.round(courseFitWeight * 100)}
+                  onChange={(e) => setCourseFitWeight(Number(e.target.value) / 100)}
+                  className="flex-1 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-green-600"
+                />
+                <span className="text-sm text-gray-600 w-8 text-right">{Math.round(courseFitWeight * 100)}%</span>
+              </div>
+              {/* Course fit context: course name, recommendation, impact */}
+              {golfers.length > 0 && (() => {
+                const profileId = matchCourseProfile(courseName);
+                const profile = profileId ? COURSE_PROFILES[profileId] : null;
+                const hasDGFit = golfers.some(g => g.dg?.courseFitAdj && g.dg.courseFitAdj !== 0);
+                const stats = getCourseFitStats(golfers, courseFitWeight);
+                const recommended = profile && hasDGFit ? '50-75' : hasDGFit ? '25-50' : '0-25';
+                return (
+                  <div className="mt-1.5 space-y-0.5">
+                    {courseName && (
+                      <p className="text-xs text-gray-500">
+                        {profile ? (
+                          <><span className="inline-block w-2 h-2 rounded-full bg-green-500 mr-1" />{courseName} — known profile</>
+                        ) : (
+                          <><span className="inline-block w-2 h-2 rounded-full bg-yellow-400 mr-1" />{courseName} — default profile</>
+                        )}
+                      </p>
+                    )}
+                    <p className="text-xs text-gray-500">
+                      Recommended: <span className="font-medium text-gray-700">{recommended}%</span>
+                      {!hasDGFit && <span className="ml-1">(no Data Golf fit data)</span>}
+                    </p>
+                    {stats && courseFitWeight > 0 && (
+                      <p className="text-xs text-gray-500">
+                        Impact: <span className="font-medium text-red-600">{stats.min > 0 ? '+' : ''}{stats.min.toFixed(1)}</span>
+                        {' to '}
+                        <span className="font-medium text-green-600">+{stats.max.toFixed(1)}</span>
+                        {' pts across '}{stats.count} players
+                      </p>
+                    )}
+                  </div>
+                );
+              })()}
             </div>
             <div className="flex items-end">
               <label className="flex items-center gap-2 cursor-pointer">
