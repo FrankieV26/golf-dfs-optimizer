@@ -12,6 +12,9 @@ import { normalizeName } from './normalize-name';
 
 const BASE = 'https://feeds.datagolf.com';
 
+// Cache DG responses for 15 minutes — data only updates a few times per day
+const DG_REVALIDATE = 900;
+
 function apiKey(): string {
   const key = process.env.DATAGOLF_API_KEY;
   if (!key) throw new Error('DATAGOLF_API_KEY not set');
@@ -21,6 +24,11 @@ function apiKey(): string {
 function url(path: string, params: Record<string, string> = {}): string {
   const qs = new URLSearchParams({ ...params, key: apiKey() });
   return `${BASE}${path}?${qs}`;
+}
+
+/** Cached fetch wrapper — uses Next.js data cache on Vercel */
+function cachedFetch(input: string): Promise<Response> {
+  return fetch(input, { next: { revalidate: DG_REVALIDATE } });
 }
 
 // ── Types ────────────────────────────────────
@@ -131,7 +139,7 @@ export async function fetchProjections(
   site: 'draftkings' | 'fanduel' = 'draftkings',
   tour = 'pga'
 ): Promise<DGProjectionResponse> {
-  const res = await fetch(url('/preds/fantasy-projection-defaults', {
+  const res = await cachedFetch(url('/preds/fantasy-projection-defaults', {
     tour,
     site,
     slate: 'main',
@@ -146,7 +154,7 @@ export async function fetchProjections(
  * Returns sg_ott, sg_app, sg_arg, sg_putt, sg_total.
  */
 export async function fetchSkillRatings(): Promise<DGSkillRatingsResponse> {
-  const res = await fetch(url('/preds/skill-ratings', {
+  const res = await cachedFetch(url('/preds/skill-ratings', {
     display: 'value',
     file_format: 'json',
   }));
@@ -161,7 +169,7 @@ export async function fetchSkillRatings(): Promise<DGSkillRatingsResponse> {
 export async function fetchDecompositions(
   tour = 'pga'
 ): Promise<DGDecompositionResponse> {
-  const res = await fetch(url('/preds/player-decompositions', {
+  const res = await cachedFetch(url('/preds/player-decompositions', {
     tour,
     file_format: 'json',
   }));
@@ -176,7 +184,7 @@ export async function fetchDecompositions(
 export async function fetchPreTournament(
   tour = 'pga'
 ): Promise<DGPreTournamentResponse> {
-  const res = await fetch(url('/preds/pre-tournament', {
+  const res = await cachedFetch(url('/preds/pre-tournament', {
     tour,
     odds_format: 'percent',
     file_format: 'json',
@@ -189,7 +197,7 @@ export async function fetchPreTournament(
  * Current tournament field with player IDs.
  */
 export async function fetchField(tour = 'pga'): Promise<DGFieldResponse> {
-  const res = await fetch(url('/field-updates', {
+  const res = await cachedFetch(url('/field-updates', {
     tour,
     file_format: 'json',
   }));
