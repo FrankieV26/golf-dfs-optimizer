@@ -40,7 +40,7 @@ export default function NavBar({ maxWidth = 'max-w-6xl' }: Props) {
     <header className="bg-white/95 dark:bg-gray-900/95 border-b border-gray-200 dark:border-gray-800 sticky top-0 z-50 backdrop-blur-sm">
       <div className={`${maxWidth} mx-auto px-4 py-3 flex items-center justify-between`}>
         <Link href="/" className="shrink-0">
-          <img src="/logo.svg" alt="BirdieVantage" className="h-12 w-auto dark:brightness-110" />
+          <img src="/logo.svg" alt="BirdieVantage" className="h-14 md:h-16 w-auto dark:brightness-110" />
         </Link>
 
         {/* Desktop nav */}
